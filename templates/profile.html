@@ -1,0 +1,11 @@
+{% extends 'layout.html' %} {% block content %}
+{% for i in projects %}
+<div class="indiv-project">
+    <h1 class="proj-name">{{i[0]}}</h1>
+    <h1 class="proj-type">{{i[1]}}</h1>
+    <a href="project/1">Link</a>
+
+</div>
+{% endfor %}
+
+{% endblock %}

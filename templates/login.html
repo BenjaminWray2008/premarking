@@ -1,5 +1,15 @@
 {% extends 'layout.html' %} {% block content %}
 
-<h2>hi</h2>
+<form method="POST">
+    <div>
+        {{form.UName.label}}
+        {{form.UName()}}
+        <br>
+        {{form.UPass.label}}
+        {{form.UPass()}}
+        <button type="submit">ye</button>
+
+    </div>
+</form>
 
 {% endblock %}
