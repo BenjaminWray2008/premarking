@@ -1,10 +1,24 @@
-h1{
-    width:100vw;
-    height:10vh;
-    background-color: cyan;
-    
-}
+
 body{
     padding:0;
     margin:0;
+}
+
+.navbar{
+    width:100vw;
+    background-color: grey;
+    padding-top:0;
+    margin:0;
+    height:10vh;
+    display:flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    
+}
+
+.logout-button{
+    margin-right:5vw;
+    padding:0.5vw;
 }
