@@ -5,10 +5,18 @@ from sqlalchemy.orm import (DeclarativeBase,
                             mapped_column,
                             relationship,
                             Session)
-from sqlalchemy import String, ForeignKey, select, create_engine
+from sqlalchemy import (String,
+                        ForeignKey,
+                        select,
+                        create_engine)
 from typing import List
 from wtforms import Form, BooleanField, StringField, validators, PasswordField
-from flask_login import UserMixin, LoginManager, login_user, login_required, logout_user, current_user
+from flask_login import (UserMixin,
+                         LoginManager,
+                         login_user,
+                         login_required,
+                         logout_user,
+                         current_user)
 from hashlib import sha256
 
 
@@ -16,7 +24,6 @@ app = Flask(__name__)
 app.config["SECRET_KEY"] = "a-very-secret-secret-key"
 login_manager = LoginManager()
 login_manager.init_app(app)
-
 login_manager.login_view = "login"
 
 
@@ -24,50 +31,67 @@ class Base(DeclarativeBase):
     pass
 
 
-class User(Base, UserMixin):
-    def __init__(self, id, username):
-        self.id = id
-        self.username = username
-        
+class User(Base):
     __tablename__ = 'User'
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(50))
-    year_level: Mapped[int]
     email: Mapped[str] = mapped_column(String(50))
+    year_level: Mapped[int]
     admin: Mapped[bool]
-    user_projects: Mapped[List["UserProject"]] = relationship("UserProject", back_populates="user")
+
+    user_projects: Mapped[List["UserProject"]] = relationship(
+        "UserProject", back_populates="user")
 
 
 class Project(Base):
     __tablename__ = 'Project'
     id: Mapped[int] = mapped_column(primary_key=True)
     type: Mapped[str] = mapped_column(String(50))
-    user_projects: Mapped[List["UserProject"]] = relationship("UserProject", back_populates="project")
-    standard_projects: Mapped[List["ProjectStandard"]] = relationship("ProjectStandard", back_populates="project")
+    
+    user_projects: Mapped[List["UserProject"]] = relationship(
+        "UserProject", back_populates="project")
+
+    standard_projects: Mapped[List["ProjectStandard"]] = relationship(
+        "ProjectStandard", back_populates="project")
 
 
 class UserProject(Base):
     __tablename__ = 'UserProject'
     id: Mapped[int] = mapped_column(primary_key=True)
-    user_id: Mapped[int] = mapped_column(ForeignKey("User.id"))
-    project_id: Mapped[int] = mapped_column(ForeignKey("Project.id"))
+    user_id: Mapped[int] = mapped_column(
+        ForeignKey("User.id"))
+
+    project_id: Mapped[int] = mapped_column(
+        ForeignKey("Project.id"))
+
+    admin_id: Mapped[int] = mapped_column(
+        ForeignKey("Admin.id"))
+
     github: Mapped[str] = mapped_column(String(50))
     doc: Mapped[str] = mapped_column(String(50))
-    admin_id: Mapped[int] = mapped_column(ForeignKey("Admin.id"))
-    user: Mapped["User"] = relationship("User", back_populates="user_projects")
-    project: Mapped["Project"] = relationship("Project", back_populates="user_projects")
-    admin: Mapped[List['Admin']] = relationship("Admin", back_populates='userproject')
 
-    def repr():
-        print(67)
-        
-        
-class Admin(Base):
+    user: Mapped["User"] = relationship(
+        "User", back_populates="user_projects")
+
+    project: Mapped["Project"] = relationship(
+        "Project", back_populates="user_projects")
+
+    admin: Mapped[List['Admin']] = relationship(
+        "Admin", back_populates='userproject')
+
+
+class Admin(Base, UserMixin):
+    def __init__(self, id, username):
+        self.id = id
+        self.username = username
+
     __tablename__ = 'Admin'
     id: Mapped[int] = mapped_column(primary_key=True)
     email: Mapped[str] = mapped_column(String(50))
     hash: Mapped[str]
-    userproject: Mapped[List['UserProject']] = relationship("UserProject", back_populates='admin')
+
+    userproject: Mapped[List['UserProject']] = relationship(
+        "UserProject", back_populates='admin')
 
 
 class Standard(Base):
@@ -75,25 +99,41 @@ class Standard(Base):
     standard_id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(50))
     credit: Mapped[int]
-    standard_projects: Mapped[List["ProjectStandard"]] = relationship("ProjectStandard", back_populates="standard")
-    ticks: Mapped[List["Tick"]] = relationship("Tick", back_populates='standard')
+
+    standard_projects: Mapped[List["ProjectStandard"]] = relationship(
+        "ProjectStandard", back_populates="standard")
+
+    ticks: Mapped[List["Tick"]] = relationship(
+        "Tick", back_populates='standard')
 
 
 class ProjectStandard(Base):
     __tablename__ = 'ProjectStandard'
     id: Mapped[int] = mapped_column(primary_key=True)
-    project_id: Mapped[int] = mapped_column(ForeignKey("Project.id"))
-    standard_id: Mapped[int] = mapped_column(ForeignKey("Standard.standard_id"))
-    project: Mapped["Project"] = relationship("Project", back_populates="standard_projects")
-    standard: Mapped["Standard"] = relationship("Standard", back_populates="standard_projects")
+    project_id: Mapped[int] = mapped_column(
+        ForeignKey("Project.id"))
+
+    standard_id: Mapped[int] = mapped_column(
+        ForeignKey("Standard.standard_id"))
+
+    project: Mapped["Project"] = relationship(
+        "Project", back_populates="standard_projects")
+
+    standard: Mapped["Standard"] = relationship(
+        "Standard", back_populates="standard_projects")
 
 
 class Tick(Base):
     __tablename__ = 'Tick'
-    standard_id: Mapped[int] = mapped_column(ForeignKey("Standard.standard_id"))
+    standard_id: Mapped[int] = mapped_column(
+        ForeignKey("Standard.standard_id"))
+
     id: Mapped[int] = mapped_column(primary_key=True)
     tick: Mapped[str] = mapped_column(String(50))
-    standard: Mapped["Standard"] = relationship('Standard', back_populates='ticks')
+    tier: Mapped[str] = mapped_column(String(50))
+
+    standard: Mapped["Standard"] = relationship(
+        'Standard', back_populates='ticks')
 
 
 engine = create_engine("sqlite:///instance/database.db")
@@ -107,58 +147,41 @@ class Login(Form):
 
 @login_manager.user_loader
 def load_user(user_id):
-    query = select(User).where(User.id == user_id)
+    query = select(Admin).where(Admin.id == user_id)
     with Session(engine) as session:
         obj = session.scalar(query)
     return obj
 
 
-
-
-
 @app.route('/', methods=['POST', 'GET'])
 def home():
-    
     return redirect(url_for('login'))
 
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
     form = Login(request.form)
-    
+
     if request.method == 'POST':
         print(form.UEmail.data)
         UEmail = form.UEmail.data
         UPass = form.UPass.data
-        
+
         q = select(Admin).where(Admin.email == UEmail)
         with Session(engine) as session:
             creds = session.scalar(q)
-            
-        id = creds.id; hash = creds.hash
+
+        id = creds.id
+        hash = creds.hash
         h = sha256()
         h.update(UPass.encode())
         hashed = h.hexdigest()
         if hashed != hash:
             return render_template('login.html', form=form)
-        
-        user = User(id=id, username=UEmail)
-        login_user(user)
-        
-        print('yippe')
-        query = select(UserProject).where(UserProject.admin_id == id)
-        with Session(engine) as session:
-            user_projects = session.scalars(query).all()
-            print(user_projects, user_projects[0].project.type)
-       
-            projects = [{
-                'id': i.id,
-                'user': i.user.name,
-                'type': i.project.type,
-            } for i in user_projects]
-        print(projects)
 
-        return render_template('profile.html', projects=projects)
+        user = Admin(id=id, username=UEmail)
+        login_user(user)
+        return redirect(url_for('profile', user_id=id))
     return render_template('login.html', form=form)
 
 
@@ -169,21 +192,50 @@ def logout():
     return redirect(url_for('login'))
 
 
-@app.route('/profile')
+@app.route('/profile/<int:user_id>')
 @login_required
-def profile():
-    return render_template('profile.html', name='bob')
-    
+def profile(user_id):
+
+    AdProj = select(UserProject).where(
+        UserProject.admin_id == user_id)  # User projects under current admin
+
+    with Session(engine) as session:
+        user_projects = session.scalars(AdProj).all()
+
+        projects = []
+        for i in user_projects:
+            projects.append({
+                'id': i.id,
+                'user': i.user.name,
+                'type': i.project.type,
+                'projstand': i.project.id
+            })
+    return render_template('profile.html',
+                           projects=projects)
+
 
 @app.route('/admin')
 def admin():
     pass
-    
 
-@app.route('/project/<int:project_id>')
-@login_required 
+
+@app.route('/profile/project/<int:project_id>')
+@login_required
 def project(project_id):
-    return render_template('project.html', id=project_id)
+    standards = {}
+    with Session(engine) as session:
+        q = select(ProjectStandard).where(
+            ProjectStandard.project_id == project_id)
+        ProjStand = session.scalars(q).all()
+
+        for standard in ProjStand:
+            q = select(Tick).where(
+                Tick.standard_id == standard.standard_id)
+
+            Ticks = session.scalars(q).all()
+
+            standards[standard.standard_id] = [(i.tier, i.tick) for i in Ticks]
+    return render_template('project.html', standards=standards)
 
 
 if __name__ == '__main__':
