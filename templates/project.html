@@ -1,5 +1,21 @@
 {% extends 'layout.html' %} {% block content %}
+<div class="proj-page-layout">
 
-<h1>{{standards}}</h1>
+<h1 class="proj-type">{{UData.name}}: {{type}} <br> {{UData.email}}</h1>
 
+
+{% for standard in standards %}
+<h1>{{standard}}</h1>
+
+{% for tier in standards[standard] %}
+<h1>{{ tier.keys() | list | first }}</h1>
+{% for tick in tier[tier.keys() | list | first ] %}
+
+<h1>{{tick}}</h1>
+
+{% endfor %}
+{% endfor %}
+{% endfor %}
+
+</div>
 {% endblock %}

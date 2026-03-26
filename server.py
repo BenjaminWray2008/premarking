@@ -18,6 +18,7 @@ from flask_login import (UserMixin,
                          logout_user,
                          current_user)
 from hashlib import sha256
+from collections import defaultdict
 
 
 app = Flask(__name__)
@@ -208,7 +209,8 @@ def profile(user_id):
                 'id': i.id,
                 'user': i.user.name,
                 'type': i.project.type,
-                'projstand': i.project.id
+                'projstand': i.project.id,
+                'user_id': i.user.id
             })
     return render_template('profile.html',
                            projects=projects)
@@ -219,9 +221,10 @@ def admin():
     pass
 
 
-@app.route('/profile/project/<int:project_id>')
+@app.route('/profile/project/<int:project_id>/<int:user_id>')
 @login_required
-def project(project_id):
+def project(project_id, user_id):
+    order = ['A', 'M', 'E']
     standards = {}
     with Session(engine) as session:
         q = select(ProjectStandard).where(
@@ -234,8 +237,35 @@ def project(project_id):
 
             Ticks = session.scalars(q).all()
 
-            standards[standard.standard_id] = [(i.tier, i.tick) for i in Ticks]
-    return render_template('project.html', standards=standards)
+            # standards[standard.standard.name] = sorted([
+            #     (i.tier, i.tick) for i in Ticks], key=lambda x: order[x[0]])
+            # standards[standard.standard.name] = []
+            # for tick in Ticks:
+            #     standards[standard.standard.name].append((i.tier, i.tick))
+
+            # standards[standard.standard.name] = sorted([[
+            #     i.tick for i in Ticks if i.tier == 'A'], [
+            #     i.tick for i in Ticks if i.tier == 'M'], [
+            #     i.tick for i in Ticks if i.tier == 'E']])
+
+            groups = defaultdict(list)
+            for tick in Ticks:
+                groups[tick.tier].append(tick.tick)
+            standards[standard.standard.name] = [
+                {tier: groups[tier]} for tier in order if groups[tier]]
+            
+        print(standards)
+        
+
+        q = select(Project).where(Project.id == project_id)
+        type = session.scalar(q).type
+        print(type)
+
+        q = select(User).where(User.id == user_id)
+        UData = session.scalar(q)
+
+    return render_template('project.html',
+                           standards=standards, type=type, UData=UData)
 
 
 if __name__ == '__main__':

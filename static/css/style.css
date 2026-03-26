@@ -22,3 +22,13 @@ body{
     margin-right:5vw;
     padding:0.5vw;
 }
+
+.proj-type{
+    text-align: center;
+}
+
+.prog-page-layout{
+    display:flex;
+    flex-direction: row;
+    justify-content: center;
+}

@@ -1,12 +1,12 @@
 {% extends 'layout.html' %} {% block content %}
 <h1>Logged in as {{current_user.email}} {{current_user.id}}</h1>
 <h1>{{current_user}}</h1>
-{% for i in projects %}
+{% for project in projects %}
 <h1>{{i}}</h1>
 <div class="indiv-project">
-    <h1 class="proj-name">{{i['user']}}</h1>
-    <h1 class="proj-type">{{i['type']}}</h1>
-    <a href="project/{{i['projstand']}}">Link</a>
+    <h1 class="proj-name">{{project['user']}}</h1>
+    <h1 class="proj-type">{{project['type']}}</h1>
+    <a href="project/{{project['projstand']}}/{{project['user_id']}}">Link</a>
 
 </div>
 {% endfor %}
