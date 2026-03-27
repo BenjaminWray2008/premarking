@@ -1,13 +1,22 @@
 {% extends 'layout.html' %} {% block content %}
 <div class="proj-page-layout">
-
+<button onclick="history.back()">Back to Projects:</button>
 <h1 class="proj-type">{{UData.name}}: {{type}} <br> {{UData.email}}</h1>
 
 
-{% for standard in standards %}
-<h1>{{standard}}</h1>
 
+<div class='dropdown' id="dropdown">
+  {% for standard in standards %}
+    <button class="standard-buttons" data-standard="{{standard}}">{{standard}}</button>
+  {% endfor %}
+</div>
+
+
+{% for standard in standards %}
+<div class="dropdown-standards" id="div-{{standard}}">
+    
 {% for tier in standards[standard] %}
+<div class="tier-div" id="tier-div" data-tier="{{ tier.keys() | list | first }}">
 <h1>{{ tier.keys() | list | first }}</h1>
 {% for tick in tier[tier.keys() | list | first ] %}
 
@@ -15,7 +24,45 @@
 
 {% endfor %}
 {% endfor %}
+</div>
+</div>
 {% endfor %}
 
 </div>
+
+
+
+
+
+<script>
+const buttons = document.querySelectorAll('.standard-buttons')
+buttons.forEach(btn => {
+btn.addEventListener('click', function() {
+    document.querySelectorAll(".dropdown-standards").forEach(div => {
+    div.style.display = "none";
+});
+const cur = this.dataset.standard
+const current = document.getElementById('div-' + cur)
+
+if (current) {
+    current.style.display = 'block'
+}
+})
+})
+
+const listy = {'A': 'green', 'M': 'blue', 'E': 'yellow'};
+
+document.querySelectorAll('.tier-div').forEach(div => {
+    const tier = div.dataset.tier;
+
+    if (listy[tier]) {
+        div.style.backgroundColor = listy[tier];
+    }
+});
+
+
+
+</script>
+
+
 {% endblock %}
