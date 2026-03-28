@@ -1,5 +1,4 @@
-from flask import Flask, render_template, redirect, url_for, request
-from flask_sqlalchemy import SQLAlchemy
+from flask import Flask, render_template, redirect, url_for, request, session
 from sqlalchemy.orm import (DeclarativeBase,
                             Mapped,
                             mapped_column,
@@ -19,7 +18,9 @@ from flask_login import (UserMixin,
                          current_user)
 from hashlib import sha256
 from collections import defaultdict
-
+from weasyprint import HTML, CSS
+import smtplib
+from email.message import EmailMessage
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "a-very-secret-secret-key"
@@ -48,7 +49,7 @@ class Project(Base):
     __tablename__ = 'Project'
     id: Mapped[int] = mapped_column(primary_key=True)
     type: Mapped[str] = mapped_column(String(50))
-    
+
     user_projects: Mapped[List["UserProject"]] = relationship(
         "UserProject", back_populates="project")
 
@@ -99,6 +100,8 @@ class Standard(Base):
     __tablename__ = 'Standard'
     standard_id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(50))
+    level: Mapped[int]
+    number: Mapped[int]
     credit: Mapped[int]
 
     standard_projects: Mapped[List["ProjectStandard"]] = relationship(
@@ -146,6 +149,74 @@ class Login(Form):
     UPass = PasswordField('Password:', validators=[validators.InputRequired()])
 
 
+def submit(ticks):
+    print(ticks)
+    return 'hi'
+
+
+def turn_to_pdf(html, email):
+    css = CSS(filename='static/css/style.css')
+    html = HTML(string=html)
+    html.write_pdf(email, stylesheets=[css])
+
+
+def send_email(email, path, proj_type, assess_num, user_name):
+    msg = EmailMessage()
+    msg['Subject'] = f'Feedback for {assess_num}'
+    msg['From'] = 'premarkingsoftware@gmail.com'
+    msg['To'] = email
+    msg.set_content(f"""Hi {user_name},
+                     here's some feedback for your {proj_type}
+                     project ({assess_num}) :)""")
+
+    with open(path, 'rb') as f:
+        pdf = f.read()
+        msg.add_attachment(pdf, maintype='application',
+                           subtype='pdf', filename='file.pdf')
+
+    with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
+        smtp.login('premarkingsoftware@gmail.com', 'tbub hjpc dgzu cpjl')
+        smtp.send_message(msg)
+
+
+def standard_data(project_id, user_id):
+    cor = {'Achieved': 'green', 'Merit': 'blue', 'Excellence': 'yellow'}
+    order = ['Achieved', 'Merit', 'Excellence']
+    standards = {}
+
+    with Session(engine) as sql_session:
+        q = select(ProjectStandard).where(
+            ProjectStandard.project_id == project_id)
+        ProjStand = sql_session.scalars(q).all()
+
+        for standard in ProjStand:
+            q = select(Tick).where(
+                Tick.standard_id == standard.standard_id)
+
+            Ticks = sql_session.scalars(q).all()
+
+            groups = defaultdict(list)
+            for tick in Ticks:
+                groups[tick.tier].append(tick.tick)
+
+            sn = str(standard.standard.name)
+            snu = str(standard.standard.number)
+
+            standards[sn + ' ' + snu] = [
+                {(tier, cor[tier]): groups[tier]}
+                for tier in order if groups[tier]
+                  ]
+        print(standards)
+
+        q = select(Project).where(Project.id == project_id)
+        type = sql_session.scalar(q).type
+        print(type)
+
+        q = select(User).where(User.id == user_id)
+        UData = sql_session.scalar(q)
+    return (UData, type, standards, snu)
+
+
 @login_manager.user_loader
 def load_user(user_id):
     query = select(Admin).where(Admin.id == user_id)
@@ -182,7 +253,8 @@ def login():
 
         user = Admin(id=id, username=UEmail)
         login_user(user)
-        return redirect(url_for('profile', user_id=id))
+        print(current_user)
+        return redirect(url_for('profile'))
     return render_template('login.html', form=form)
 
 
@@ -193,12 +265,14 @@ def logout():
     return redirect(url_for('login'))
 
 
-@app.route('/profile/<int:user_id>')
+@app.route('/profile')
 @login_required
-def profile(user_id):
+def profile():
+    print(current_user.id)
 
     AdProj = select(UserProject).where(
-        UserProject.admin_id == user_id)  # User projects under current admin
+        UserProject.admin_id == current_user.id)
+    # User projects under current admin
 
     with Session(engine) as session:
         user_projects = session.scalars(AdProj).all()
@@ -216,56 +290,53 @@ def profile(user_id):
                            projects=projects)
 
 
-@app.route('/admin')
-def admin():
-    pass
-
-
-@app.route('/profile/project/<int:project_id>/<int:user_id>')
+@app.route('/project/<int:project_id>/<int:user_id>', methods=['POST', 'GET'])
 @login_required
 def project(project_id, user_id):
-    order = ['A', 'M', 'E']
-    standards = {}
-    with Session(engine) as session:
-        q = select(ProjectStandard).where(
-            ProjectStandard.project_id == project_id)
-        ProjStand = session.scalars(q).all()
 
-        for standard in ProjStand:
-            q = select(Tick).where(
-                Tick.standard_id == standard.standard_id)
+    if request.method == 'POST':
+        tickValues = request.form.getlist("ticks")
+        form_data = request.form.to_dict()
+        textValues = {}
+        for key, value in form_data.items():
+            if key.startswith("texts["):
+                text = key[6:-1]
+                textValues[text] = value
 
-            Ticks = session.scalars(q).all()
-
-            # standards[standard.standard.name] = sorted([
-            #     (i.tier, i.tick) for i in Ticks], key=lambda x: order[x[0]])
-            # standards[standard.standard.name] = []
-            # for tick in Ticks:
-            #     standards[standard.standard.name].append((i.tier, i.tick))
-
-            # standards[standard.standard.name] = sorted([[
-            #     i.tick for i in Ticks if i.tier == 'A'], [
-            #     i.tick for i in Ticks if i.tier == 'M'], [
-            #     i.tick for i in Ticks if i.tier == 'E']])
-
-            groups = defaultdict(list)
-            for tick in Ticks:
-                groups[tick.tier].append(tick.tick)
-            standards[standard.standard.name] = [
-                {tier: groups[tier]} for tier in order if groups[tier]]
-            
-        print(standards)
-        
-
-        q = select(Project).where(Project.id == project_id)
-        type = session.scalar(q).type
-        print(type)
-
-        q = select(User).where(User.id == user_id)
-        UData = session.scalar(q)
-
+        session['texts'] = textValues
+        session["ticks"] = tickValues
+        return redirect(url_for('clean',
+                                project_id=project_id, user_id=user_id))
+    
+    UData, type, standards, snu = standard_data(project_id, user_id)
     return render_template('project.html',
-                           standards=standards, type=type, UData=UData)
+                           standards=standards, type=type,
+                           UData=UData, snu=snu)
+
+
+@app.route('/clean/<int:project_id>/<int:user_id>')
+@login_required
+def clean(project_id, user_id):
+    tickValues = session.get('ticks', [])
+    textValues = session.get('texts', [])
+    print(tickValues)
+    UData, type, standards, snu = standard_data(project_id, user_id)
+
+    html = render_template('clean.html',
+                           standards=standards, type=type,
+                           UData=UData, tickValues=tickValues,
+                           textValues=textValues)
+
+    q = select(User).where(User.id == user_id)
+    with Session(engine) as sql_session:
+        user = sql_session.scalar(q)
+    email = user.email
+    
+    path = 'email.pdf'
+    turn_to_pdf(html, path)
+    send_email(email, path, type, snu, UData.name)
+
+    return redirect(url_for('profile'))
 
 
 if __name__ == '__main__':

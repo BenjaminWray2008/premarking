@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="proj-page-layout">
+
+        <h1 class="proj-type">{{UData.name}}: {{type}} <br> {{UData.email}}</h1>
+
+
+        {% for standard in standards %}
+        <h1 class="standard-name">{{standard}}</h1>
+        <div class="dropdown-standards-clean">
+
+            {% for tier in standards[standard] %}
+            <div>
+                <div class="tier-div {{ (tier.keys() | list | first)[1]}}">
+                    <h1 class="tier-name">{{ tier.keys() | list | first | first}}</h1>
+                </div>
+                {% for tick in tier[tier.keys() | list | first ] %}
+                    <h1 class="clean-tick-tick">{{tick}} - {% if standard ~ '-' ~ tick in tickValues %}Completed!{% else %}Not Completed!{% endif %}</h1>
+                    <p>{% if textValues[standard ~ '-' ~ tick] %}{{ textValues[standard ~ '-' ~ tick] }}{% else %}No Feedback Required!{% endif %}</p>
+                {% endfor %}
+            </div>
+            {% endfor %}
+
+        </div>
+        <br>
+        <div class="line"></div>
+        <br>
+        {% endfor %}
+
+    </div>
+</body>
+
+</html>

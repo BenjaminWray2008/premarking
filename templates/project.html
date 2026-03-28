@@ -1,64 +1,78 @@
 {% extends 'layout.html' %} {% block content %}
 <div class="proj-page-layout">
-<button onclick="history.back()">Back to Projects:</button>
-<h1 class="proj-type">{{UData.name}}: {{type}} <br> {{UData.email}}</h1>
+  <button onclick="history.back()">Back to Projects:</button>
+  <h1 class="proj-type">{{UData.name}}: {{type}} <br> {{UData.email}}</h1>
+
+  <form method="POST">
+    <div class="div-center-multi">
+      <button type="submit" class="submit-buttons">Submit</button>
+    </div>
+    <div class='dropdown' id="dropdown">
+      {% for standard in standards %}
+      <button type="button" class="standard-buttons submit-buttons" data-standard="{{standard}}">{{standard}}</button>
+      {% endfor %}
+    </div>
 
 
+    {% for standard in standards %}
+    <div class="dropdown-standards" id="div-{{standard}}">
+      <h1 class="standard-name">{{standard}}</h1>
 
-<div class='dropdown' id="dropdown">
-  {% for standard in standards %}
-    <button class="standard-buttons" data-standard="{{standard}}">{{standard}}</button>
-  {% endfor %}
+      {% for tier in standards[standard] %}
+      <div>
+        <div class="tier-div">
+          <h1 class="tier-tag" data-tier="{{ (tier.keys() | list | first)[0] }}">{{ (tier.keys() | list | first)[0] }} Criteria
+          </h1>
+        </div>
+        {% for tick in tier[tier.keys() | list | first ] %}
+        <div class="tick-div">
+          <div class="div-row check-tick">
+            <p class="tick-tag">{{tick}}</p>
+            <input type="checkbox" name="ticks" value="{{standard}}-{{tick}}">
+          </div>
+
+          <textarea wrap="hard" name="texts[{{standard}}-{{tick}}]" placeholder="Feedback:" maxlength="50"></textarea>
+        </div>
+        {% endfor %}
+      </div>
+      {% endfor %}
+
+    </div>
+    {% endfor %}
+
 </div>
 
 
-{% for standard in standards %}
-<div class="dropdown-standards" id="div-{{standard}}">
-    
-{% for tier in standards[standard] %}
-<div class="tier-div" id="tier-div" data-tier="{{ tier.keys() | list | first }}">
-<h1>{{ tier.keys() | list | first }}</h1>
-{% for tick in tier[tier.keys() | list | first ] %}
-
-<h1>{{tick}}</h1>
-
-{% endfor %}
-{% endfor %}
-</div>
-</div>
-{% endfor %}
-
-</div>
-
+</form>
 
 
 
 
 <script>
-const buttons = document.querySelectorAll('.standard-buttons')
-buttons.forEach(btn => {
-btn.addEventListener('click', function() {
-    document.querySelectorAll(".dropdown-standards").forEach(div => {
-    div.style.display = "none";
-});
-const cur = this.dataset.standard
-const current = document.getElementById('div-' + cur)
+  const buttons = document.querySelectorAll('.standard-buttons')
+  buttons.forEach(btn => {
+    btn.addEventListener('click', function () {
+      document.querySelectorAll(".dropdown-standards").forEach(div => {
+        div.style.display = "none";
+      });
+      const cur = this.dataset.standard
+      const current = document.getElementById('div-' + cur)
 
-if (current) {
-    current.style.display = 'block'
-}
-})
-})
+      if (current) {
+        current.style.display = 'block'
+      }
+    })
+  })
 
-const listy = {'A': 'green', 'M': 'blue', 'E': 'yellow'};
+  const listy = { 'Achieved': '#008000', 'Merit': '#0275D8', 'Excellence': '#FFCC33' };
 
-document.querySelectorAll('.tier-div').forEach(div => {
+  document.querySelectorAll('.tier-tag').forEach(div => {
     const tier = div.dataset.tier;
 
     if (listy[tier]) {
-        div.style.backgroundColor = listy[tier];
+      div.style.color = listy[tier];
     }
-});
+  });
 
 
 
