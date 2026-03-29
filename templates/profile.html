@@ -1,7 +1,14 @@
 {% extends 'layout.html' %} {% block content %}
 <h1>Logged in as {{current_user.email}} {{current_user.id}}</h1>
+
+<form method="POST">
+        {{form.file()}}
+        <button type="submit">ye</button>
+
+</form>
 {% for project in projects %}
 <h1>{{i}}</h1>
+
 <div class="indiv-project">
     <h1 class="proj-name">{{project['user']}}</h1>
     <h1 class="proj-type">{{project['type']}}</h1>

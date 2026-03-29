@@ -9,7 +9,7 @@ from sqlalchemy import (String,
                         select,
                         create_engine)
 from typing import List
-from wtforms import Form, BooleanField, StringField, validators, PasswordField
+from wtforms import Form, BooleanField, StringField, validators, PasswordField, FileField
 from flask_login import (UserMixin,
                          LoginManager,
                          login_user,
@@ -21,6 +21,8 @@ from collections import defaultdict
 from weasyprint import HTML, CSS
 import smtplib
 from email.message import EmailMessage
+import csv
+from flask_wtf.file import FileField, FileAllowed, FileRequired
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "a-very-secret-secret-key"
@@ -148,9 +150,11 @@ class Login(Form):
     UEmail = StringField('Email:', validators=[validators.InputRequired()])
     UPass = PasswordField('Password:', validators=[validators.InputRequired()])
 
+class NewUser(Form):
+    file = FileField('Browse Files:', validators=[validators.InputRequired()])
+
 
 def submit(ticks):
-    print(ticks)
     return 'hi'
 
 
@@ -210,7 +214,6 @@ def standard_data(project_id, user_id):
 
         q = select(Project).where(Project.id == project_id)
         type = sql_session.scalar(q).type
-        print(type)
 
         q = select(User).where(User.id == user_id)
         UData = sql_session.scalar(q)
@@ -235,7 +238,6 @@ def login():
     form = Login(request.form)
 
     if request.method == 'POST':
-        print(form.UEmail.data)
         UEmail = form.UEmail.data
         UPass = form.UPass.data
 
@@ -253,7 +255,6 @@ def login():
 
         user = Admin(id=id, username=UEmail)
         login_user(user)
-        print(current_user)
         return redirect(url_for('profile'))
     return render_template('login.html', form=form)
 
@@ -265,11 +266,15 @@ def logout():
     return redirect(url_for('login'))
 
 
-@app.route('/profile')
+@app.route('/profile', methods=['POST', 'GET'])
 @login_required
 def profile():
-    print(current_user.id)
-
+    form = NewUser(request.form)
+    if request.method == 'POST':
+        csvv = form.file.data
+        print(csvv)
+        
+    
     AdProj = select(UserProject).where(
         UserProject.admin_id == current_user.id)
     # User projects under current admin
@@ -287,7 +292,7 @@ def profile():
                 'user_id': i.user.id
             })
     return render_template('profile.html',
-                           projects=projects)
+                           projects=projects, form=form)
 
 
 @app.route('/project/<int:project_id>/<int:user_id>', methods=['POST', 'GET'])
@@ -319,7 +324,6 @@ def project(project_id, user_id):
 def clean(project_id, user_id):
     tickValues = session.get('ticks', [])
     textValues = session.get('texts', [])
-    print(tickValues)
     UData, type, standards, snu = standard_data(project_id, user_id)
 
     html = render_template('clean.html',
@@ -335,6 +339,7 @@ def clean(project_id, user_id):
     path = 'email.pdf'
     turn_to_pdf(html, path)
     send_email(email, path, type, snu, UData.name)
+    print('EMAIL SENT')
 
     return redirect(url_for('profile'))
 

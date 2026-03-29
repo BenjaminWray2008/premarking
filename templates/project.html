@@ -1,6 +1,6 @@
 {% extends 'layout.html' %} {% block content %}
 <div class="proj-page-layout">
-  <button onclick="history.back()">Back to Projects:</button>
+  <button class="submit-buttons" onclick="history.back()">Back to Projects:</button>
   <h1 class="proj-type">{{UData.name}}: {{type}} <br> {{UData.email}}</h1>
 
   <form method="POST">

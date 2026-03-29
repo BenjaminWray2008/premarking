@@ -82,6 +82,7 @@ body{
     flex-direction: row;
     justify-content: space-between;
     justify-content: center;
+    margin-bottom:2vw;
 }
 
 .div-row{
