@@ -8,8 +8,10 @@ from sqlalchemy import (String,
                         ForeignKey,
                         select,
                         create_engine)
+from flask_sqlalchemy import SQLAlchemy
+from flask_wtf import FlaskForm
 from typing import List
-from wtforms import Form, BooleanField, StringField, validators, PasswordField, FileField
+from wtforms import Form, BooleanField, StringField, validators, PasswordField, FileField, SelectField
 from flask_login import (UserMixin,
                          LoginManager,
                          login_user,
@@ -29,6 +31,7 @@ app.config["SECRET_KEY"] = "a-very-secret-secret-key"
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "login"
+db = SQLAlchemy()
 
 
 class Base(DeclarativeBase):
@@ -150,8 +153,12 @@ class Login(Form):
     UEmail = StringField('Email:', validators=[validators.InputRequired()])
     UPass = PasswordField('Password:', validators=[validators.InputRequired()])
 
-class NewUser(Form):
-    file = FileField('Browse Files:', validators=[validators.InputRequired()])
+
+class NewUser(FlaskForm):
+    file = FileField('Browse Files:', validators=[
+        FileRequired(), FileAllowed(['csv'], 'CSV only')
+        ])
+    dropdown = SelectField('Select', choices=[])
 
 
 def submit(ticks):
@@ -220,6 +227,24 @@ def standard_data(project_id, user_id):
     return (UData, type, standards, snu)
 
 
+def new_user(file, selected):
+    stream = file.stream.read().decode("utf-8").splitlines()
+
+    reader = csv.reader(stream)
+
+    for index, row in enumerate(reader):
+        if index == 0:
+            continue
+        id = row[0]
+        surname = row[1]
+        first_name = row[2]
+        year_level = row[4]
+        user = User(name=f"{first_name} {surname}", year_level=year_level, email=f'{id}@buurnside.school.nz', admin=False)
+        db.session.add(user)
+        
+    db.session.commit()
+
+
 @login_manager.user_loader
 def load_user(user_id):
     query = select(Admin).where(Admin.id == user_id)
@@ -269,10 +294,23 @@ def logout():
 @app.route('/profile', methods=['POST', 'GET'])
 @login_required
 def profile():
-    form = NewUser(request.form)
-    if request.method == 'POST':
-        csvv = form.file.data
-        print(csvv)
+    form = NewUser()
+    with Session(engine) as sql_session:
+        q = select(Project)
+        project_types = sql_session.scalars(q).all()
+        
+    form.dropdown.choices = [i.type for i in project_types]
+
+    if form.validate_on_submit():
+        file = form.file.data
+        selected = form.dropdown.data
+        print("VALID FILE:", file, selected)
+        
+        # new_user(file, selected)
+
+    else:
+        if request.method == 'POST':
+            print("ERRORS:", form.errors)
         
     
     AdProj = select(UserProject).where(
