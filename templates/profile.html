@@ -1,22 +1,23 @@
 {% extends 'layout.html' %} {% block content %}
-<h1>Logged in as {{current_user.email}} {{current_user.id}}</h1>
+<h1 class="logged-in">Logged in as {{current_user.email}}</h1>
 
 <form method="POST" enctype="multipart/form-data">
-    {{form.hidden_tag()}}
-    {{form.file()}}
+    {{ form.hidden_tag() }}
+    {{ form.file() }}
     {{ form.dropdown.label }}
     {{ form.dropdown() }}
-    <button type="submit">ye</button>
+    {{ form.upload.label }}
+    {{ form.upload() }}
 
 </form>
 {% for project in projects %}
-<h1>{{i}}</h1>
 
 <div class="indiv-project">
-    <h1 class="proj-name">{{project['user']}}</h1>
-    <h1 class="proj-type">{{project['type']}}</h1>
-    <a href="project/{{project['projstand']}}/{{project['user_id']}}">Link</a>
-
+    <div class="centre-projects">
+    <h1 class="">{{project['user']}}: {{project['type']}} Project</h1>
+    <a href="project/{{project['projstand']}}/{{project['user_id']}}" class="project-link">Access {{project['user']}}'s Project!</a>
+    </div>
+    <div class="line between-projects"></div>
 </div>
 {% endfor %}
 

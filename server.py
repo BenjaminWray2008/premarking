@@ -11,7 +11,7 @@ from sqlalchemy import (String,
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
 from typing import List
-from wtforms import Form, BooleanField, StringField, validators, PasswordField, FileField, SelectField
+from wtforms import Form, BooleanField, StringField, validators, PasswordField, FileField, SelectField, SubmitField
 from flask_login import (UserMixin,
                          LoginManager,
                          login_user,
@@ -32,6 +32,9 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "login"
 db = SQLAlchemy()
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
+db.init_app(app)
+
 
 
 class Base(DeclarativeBase):
@@ -159,6 +162,12 @@ class NewUser(FlaskForm):
         FileRequired(), FileAllowed(['csv'], 'CSV only')
         ])
     dropdown = SelectField('Select', choices=[])
+    upload = SubmitField('Upload')
+
+
+class SearchUser(Form):
+    UName = StringField('Enter User:', validators=[validators.InputRequired()])
+    search = SubmitField('Search User:')
 
 
 def submit(ticks):
@@ -231,18 +240,32 @@ def new_user(file, selected):
     stream = file.stream.read().decode("utf-8").splitlines()
 
     reader = csv.reader(stream)
+    with Session(engine) as sql_session:
+        for index, row in enumerate(reader):
+            if index == 0:
+                continue
+            id = row[0]
+            surname = row[1]
+            first_name = row[2]
+            year_level = row[4]
 
-    for index, row in enumerate(reader):
-        if index == 0:
-            continue
-        id = row[0]
-        surname = row[1]
-        first_name = row[2]
-        year_level = row[4]
-        user = User(name=f"{first_name} {surname}", year_level=year_level, email=f'{id}@buurnside.school.nz', admin=False)
-        db.session.add(user)
-        
-    db.session.commit()
+            q = select(User).where(User.id == id)
+            exist = sql_session.scalar(q)
+
+            q = select(Project).where(Project.type == selected)
+            project_id = sql_session.scalar(q).id
+
+            new_project = UserProject(user_id=id, project_id=project_id, admin_id=current_user.id)
+            db.session.add(new_project)
+
+            if exist:
+                continue
+
+            user = User(id=id, name=f"{first_name} {surname}", year_level=year_level, email=f'{id}@buurnside.school.nz', admin=False)
+            db.session.add(user)
+
+        db.session.commit()
+    return 'hi'
 
 
 @login_manager.user_loader
@@ -295,24 +318,23 @@ def logout():
 @login_required
 def profile():
     form = NewUser()
+    search_form = SearchUser(request.form)
     with Session(engine) as sql_session:
         q = select(Project)
         project_types = sql_session.scalars(q).all()
-        
+
     form.dropdown.choices = [i.type for i in project_types]
 
     if form.validate_on_submit():
         file = form.file.data
         selected = form.dropdown.data
         print("VALID FILE:", file, selected)
-        
-        # new_user(file, selected)
+        new_user(file, selected)
 
     else:
         if request.method == 'POST':
             print("ERRORS:", form.errors)
-        
-    
+
     AdProj = select(UserProject).where(
         UserProject.admin_id == current_user.id)
     # User projects under current admin
