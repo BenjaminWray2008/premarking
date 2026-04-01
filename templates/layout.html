@@ -11,9 +11,11 @@
 <body>
     <div class="navbar">
         <h1>navbar</h1>
-        <form method="POST">
 
-        </form>
+
+        <input type="text" id="searchbar" placeholder=".......">
+   
+
         <form action="/logout">
             <button type="submit" class="logout-button">Logout!</button>
         </form>
@@ -21,6 +23,24 @@
     {% block content %}
 
     {% endblock %}
+<script>
+    const searchbar = document.getElementById('searchbar')
+    console.log('hi')
+    searchbar.addEventListener('input', async () => {
+        document.querySelectorAll(".indiv-project").forEach(project => {
+        project.style.backgroundColor = "";
+    });
+        
+        const q = searchbar.value;
+        if (!q) return;
+        console.log(q)
+        const response = await fetch(`/search?q=${encodeURIComponent(q)}`);
+        const data = await response.json();
+        data.forEach(item => {
+            snap(item.id)
+        })
+    })
+    </script>
 </body>
 
 </html>

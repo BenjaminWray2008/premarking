@@ -1,6 +1,6 @@
 {% extends 'layout.html' %} {% block content %}
 <h1 class="logged-in">Logged in as {{current_user.email}}</h1>
-
+<div class="project-page">
 <form method="POST" enctype="multipart/form-data">
     {{ form.hidden_tag() }}
     {{ form.file() }}
@@ -10,15 +10,46 @@
     {{ form.upload() }}
 
 </form>
+<div class="projects">
 {% for project in projects %}
 
-<div class="indiv-project">
+<div class="indiv-project" name="project-{{project['user_id']}}">
     <div class="centre-projects">
-    <h1 class="">{{project['user']}}: {{project['type']}} Project</h1>
-    <a href="project/{{project['projstand']}}/{{project['user_id']}}" class="project-link">Access {{project['user']}}'s Project!</a>
+    <h1 class="project-user-name">{{project['user']}}</h1>
+    <h1>{{project['type']}} Project</h1>
+    <a href="project/{{project['projstand']}}/{{project['user_id']}}" class="project-link">Access the Project!</a>
     </div>
     <div class="line between-projects"></div>
 </div>
 {% endfor %}
+</div>
+</div>
+
+<script>
+   
+
+
+
+    function snap(user) {
+        console.log(user)
+        const search = document.getElementsByName(`project-${user}`);
+        console.log(search)
+        if (search) {
+        search.forEach(item => {
+            item.scrollIntoView()
+            item.scrollIntoView({ behavior: "smooth", block: "center" });
+            item.style.backgroundColor = "green";
+        })
+
+        
+            
+         
+        }
+
+
+
+    }
+</script>
 
 {% endblock %}
+

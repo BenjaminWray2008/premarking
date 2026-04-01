@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for, request, session
+from flask import Flask, render_template, redirect, url_for, request, session, jsonify
 from sqlalchemy.orm import (DeclarativeBase,
                             Mapped,
                             mapped_column,
@@ -165,9 +165,9 @@ class NewUser(FlaskForm):
     upload = SubmitField('Upload')
 
 
-class SearchUser(Form):
-    UName = StringField('Enter User:', validators=[validators.InputRequired()])
-    search = SubmitField('Search User:')
+# class SearchUser(Form):
+#     UName = StringField('Enter User:', validators=[validators.InputRequired()])
+#     search = SubmitField('Search User:')
 
 
 def submit(ticks):
@@ -251,9 +251,17 @@ def new_user(file, selected):
 
             q = select(User).where(User.id == id)
             exist = sql_session.scalar(q)
+           
 
             q = select(Project).where(Project.type == selected)
             project_id = sql_session.scalar(q).id
+
+            q = select(UserProject).where(UserProject.user_id == id).where(UserProject.project_id == project_id).where(UserProject.admin_id == current_user.id)
+            proj_exist = sql_session.scalar(q)
+
+            if proj_exist:
+                print('already done')
+                continue
 
             new_project = UserProject(user_id=id, project_id=project_id, admin_id=current_user.id)
             db.session.add(new_project)
@@ -318,7 +326,7 @@ def logout():
 @login_required
 def profile():
     form = NewUser()
-    search_form = SearchUser(request.form)
+    # search_form = SearchUser(request.form)
     with Session(engine) as sql_session:
         q = select(Project)
         project_types = sql_session.scalars(q).all()
@@ -353,6 +361,22 @@ def profile():
             })
     return render_template('profile.html',
                            projects=projects, form=form)
+
+@app.route('/search', methods=['POST', 'GET'])
+@login_required
+def search():
+    q = request.args.get("q", "")
+    data = []
+    with Session(engine) as sql_session:
+        user_ids = sql_session.scalars(select(User).where(User.name.contains(q))).all()
+        for user in user_ids:
+            user_id = user.id
+            result = sql_session.scalar(select(UserProject).where(UserProject.user_id == user_id).where(UserProject.admin_id == current_user.id))
+            data.append({
+            'id': result.user_id
+            })
+    print(data)
+    return jsonify(data)
 
 
 @app.route('/project/<int:project_id>/<int:user_id>', methods=['POST', 'GET'])
