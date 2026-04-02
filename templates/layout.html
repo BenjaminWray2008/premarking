@@ -10,15 +10,18 @@
 
 <body>
     <div class="navbar">
-        <h1>navbar</h1>
-
-
-        <input type="text" id="searchbar" placeholder=".......">
-   
-
+        <h1 class="site-name">Project Premarking</h1>
+        <div class="div-row">
+        {% if searchBar %}
+        <input class="searchbar" type="text" id="searchbar" placeholder=".......">
+        {% endif %}
+        {% if current_user.is_authenticated %}
         <form action="/logout">
-            <button type="submit" class="logout-button">Logout!</button>
+            <button type="submit" class="logout-button logout">Logout!</button>
         </form>
+        {% endif %}
+
+        </div>
     </div>
     {% block content %}
 

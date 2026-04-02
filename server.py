@@ -1,4 +1,10 @@
-from flask import Flask, render_template, redirect, url_for, request, session, jsonify
+from flask import (Flask,
+                   render_template,
+                   redirect,
+                   url_for,
+                   request,
+                   session,
+                   jsonify)
 from sqlalchemy.orm import (DeclarativeBase,
                             Mapped,
                             mapped_column,
@@ -11,7 +17,13 @@ from sqlalchemy import (String,
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
 from typing import List
-from wtforms import Form, BooleanField, StringField, validators, PasswordField, FileField, SelectField, SubmitField
+from wtforms import (Form,
+                     BooleanField,
+                     StringField,
+                     validators,
+                     PasswordField,
+                     SelectField,
+                     SubmitField)
 from flask_login import (UserMixin,
                          LoginManager,
                          login_user,
@@ -34,7 +46,6 @@ login_manager.login_view = "login"
 db = SQLAlchemy()
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 db.init_app(app)
-
 
 
 class Base(DeclarativeBase):
@@ -79,6 +90,7 @@ class UserProject(Base):
 
     github: Mapped[str] = mapped_column(String(50))
     doc: Mapped[str] = mapped_column(String(50))
+    marked: Mapped[bool]
 
     user: Mapped["User"] = relationship(
         "User", back_populates="user_projects")
@@ -165,11 +177,6 @@ class NewUser(FlaskForm):
     upload = SubmitField('Upload')
 
 
-# class SearchUser(Form):
-#     UName = StringField('Enter User:', validators=[validators.InputRequired()])
-#     search = SubmitField('Search User:')
-
-
 def submit(ticks):
     return 'hi'
 
@@ -251,25 +258,31 @@ def new_user(file, selected):
 
             q = select(User).where(User.id == id)
             exist = sql_session.scalar(q)
-           
 
             q = select(Project).where(Project.type == selected)
             project_id = sql_session.scalar(q).id
 
-            q = select(UserProject).where(UserProject.user_id == id).where(UserProject.project_id == project_id).where(UserProject.admin_id == current_user.id)
+            q = select(UserProject).where(
+                UserProject.user_id == id).where(
+                    UserProject.project_id == project_id
+                    ).where(UserProject.admin_id == current_user.id)
             proj_exist = sql_session.scalar(q)
 
             if proj_exist:
                 print('already done')
                 continue
 
-            new_project = UserProject(user_id=id, project_id=project_id, admin_id=current_user.id)
+            new_project = UserProject(
+                user_id=id, project_id=project_id,
+                admin_id=current_user.id)
             db.session.add(new_project)
 
             if exist:
                 continue
 
-            user = User(id=id, name=f"{first_name} {surname}", year_level=year_level, email=f'{id}@buurnside.school.nz', admin=False)
+            user = User(id=id, name=f"{first_name} {surname}",
+                        year_level=year_level,
+                        email=f'{id}@buurnside.school.nz', admin=False)
             db.session.add(user)
 
         db.session.commit()
@@ -291,6 +304,7 @@ def home():
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
+    print(current_user)
     form = Login(request.form)
 
     if request.method == 'POST':
@@ -322,11 +336,10 @@ def logout():
     return redirect(url_for('login'))
 
 
-@app.route('/profile', methods=['POST', 'GET'])
+@app.route('/instructions', methods=['POST', 'GET'])
 @login_required
-def profile():
+def instructions():
     form = NewUser()
-    # search_form = SearchUser(request.form)
     with Session(engine) as sql_session:
         q = select(Project)
         project_types = sql_session.scalars(q).all()
@@ -343,24 +356,41 @@ def profile():
         if request.method == 'POST':
             print("ERRORS:", form.errors)
 
+    return render_template('instructions.html', form=form)
+
+
+@app.route('/profile', methods=['POST', 'GET'])
+@login_required
+def profile():
+
     AdProj = select(UserProject).where(
         UserProject.admin_id == current_user.id)
     # User projects under current admin
-
     with Session(engine) as session:
         user_projects = session.scalars(AdProj).all()
-
+        marked_count = 0
+        unmarked_count = 0
         projects = []
         for i in user_projects:
+            if i.marked == 1:
+                premarked = 'Premarked'
+                marked_count += 1
+            else:
+                premarked = 'Unmarked'
+                unmarked_count += 1
+
             projects.append({
                 'id': i.id,
                 'user': i.user.name,
                 'type': i.project.type,
                 'projstand': i.project.id,
-                'user_id': i.user.id
+                'user_id': i.user.id,
+                'marked': premarked
             })
     return render_template('profile.html',
-                           projects=projects, form=form)
+                           projects=projects, searchBar=True,
+                           counts=(marked_count, unmarked_count))
+
 
 @app.route('/search', methods=['POST', 'GET'])
 @login_required
@@ -368,12 +398,15 @@ def search():
     q = request.args.get("q", "")
     data = []
     with Session(engine) as sql_session:
-        user_ids = sql_session.scalars(select(User).where(User.name.contains(q))).all()
+        user_ids = sql_session.scalars(
+            select(User).where(User.name.contains(q))).all()
         for user in user_ids:
             user_id = user.id
-            result = sql_session.scalar(select(UserProject).where(UserProject.user_id == user_id).where(UserProject.admin_id == current_user.id))
+            result = sql_session.scalar(select(UserProject).where(
+                UserProject.user_id == user_id).where(
+                    UserProject.admin_id == current_user.id))
             data.append({
-            'id': result.user_id
+             'id': result.user_id
             })
     print(data)
     return jsonify(data)
@@ -396,7 +429,7 @@ def project(project_id, user_id):
         session["ticks"] = tickValues
         return redirect(url_for('clean',
                                 project_id=project_id, user_id=user_id))
-    
+
     UData, type, standards, snu = standard_data(project_id, user_id)
     return render_template('project.html',
                            standards=standards, type=type,
@@ -419,7 +452,6 @@ def clean(project_id, user_id):
     with Session(engine) as sql_session:
         user = sql_session.scalar(q)
     email = user.email
-    
     path = 'email.pdf'
     turn_to_pdf(html, path)
     send_email(email, path, type, snu, UData.name)

@@ -1,0 +1,15 @@
+{% extends 'layout.html' %} {% block content %}
+<a href="profile" class="project-link">Back to Profile -></a>
+<h1>Instructions to add new projects:</h1>
+<p>blah blah blah</p>
+<form method="POST" enctype="multipart/form-data">
+            <p>Add Projects:</p>
+            {{ form.hidden_tag() }}
+            {{ form.file() }}
+            {{ form.dropdown.label }}
+            {{ form.dropdown() }}
+            {{ form.upload.label }}
+            {{ form.upload() }}
+
+        </form>
+{% endblock %}
