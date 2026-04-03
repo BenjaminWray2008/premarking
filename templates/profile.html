@@ -14,7 +14,7 @@
                 <a href="instructions" class="project-link">Add new student projects:</a>
             </p>
         </div>
-       
+
     </div>
     <div class="projects">
         {% for project in projects %}
@@ -31,7 +31,10 @@
         </div>
         {% endfor %}
     </div>
+    <button id="top" class="top-button">Go to Top:</button>
 </div>
+
+
 
 <script>
 
@@ -47,16 +50,33 @@
                 item.scrollIntoView()
                 item.scrollIntoView({ behavior: "smooth", block: "center" });
                 item.style.backgroundColor = "green";
+                item.style.borderTopLeftRadius = '1vw';
+                item.style.borderTopRightRadius = '1vw';
             })
-
-
-
-
         }
-
-
-
     }
+    const topButton = document.getElementById('top')
+    
+    function scroll() {
+        if (document.body.scrollTop > 50 || document.documentElement.scrollTop > 50) {
+            topButton.style.display = "block";
+        }
+        else {
+            topButton.style.display = "none";
+        }
+    }
+
+    topButton.onclick = function() {
+        window.scrollTo({
+            top: 0
+        })
+    }
+
+    
+    window.onscroll = function() {
+        scroll()
+    }
+
 </script>
 
 {% endblock %}

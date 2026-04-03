@@ -2,6 +2,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
+
+html {
+  scroll-behavior: smooth;
+}
+
 h1{
     font-family: 'Poppins';
     font-size: 2.2vw;
@@ -199,24 +204,25 @@ textarea{
 
 .project-user-name{
     margin-bottom: 1vw;
+    margin-top:0;
 }
 
 .searchbar{
     margin-right:2vw;
-    padding:0.3vw;
+    padding:0.4vw;
     border-radius: 5px;
-    border:none;
+    border:1px black solid;
     font-size: 1vw;
     color:black;
-    background-color: rgb(243, 232, 245);
+    background-color: rgb(232, 243, 245);
 }
 
 .logout{
-    background-color: rgb(243, 232, 245);
+    background-color: rgb(231, 255, 249);
     font-family: 'Inter';
-    padding:0.3vw;
+    padding:0.4vw;
     border-radius: 5px;
-    border:none;
+    border:1px black solid;
     font-size: 1vw;
     color:black;
     }
@@ -251,3 +257,116 @@ textarea{
     padding:0.3vw;
     border-radius: 1vw;
 }
+
+.top-button{
+    display: none;
+    position:fixed;
+    bottom: 1vh;
+    right: 0.8vw;
+    z-index: 99;
+    background-color: rgb(242, 179, 253);
+    font-family: 'Inter';
+    padding:0.5vw;
+    border-radius: 5px;
+    border:none;
+    font-size: 1vw;
+    color:black;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.top-button:hover{
+    background-color: rgb(228, 102, 250);
+    font-weight: bolder;
+}
+
+
+/* #region Signin*/
+
+.total-sign-up{
+  padding:1vw;
+  padding-bottom: 0vw;
+  border:2px black solid;
+  border-radius: 0.75vw;
+  width: fit-content;
+  background-color: rgb(252, 251, 251);
+}
+
+.details-div{
+  display: flex;
+  flex-direction: column;
+}
+
+.sign-up-page{
+  padding:5vw;
+  display: flex;
+  justify-content: center;
+}
+
+.signup-labels{
+    font-size: 1.4vw;
+    margin: 0.9vh 0 0.9vh 0;
+    font-family: 'Inter';
+}
+
+.signup-page-flex-line{
+  margin-bottom:1.5vw;
+}
+
+.submit-signup{
+  background-color: #358b35;
+  border:none;
+  border-radius: 0.75vw;
+  padding: 0.5vw 1vw 0.5vw 1vw;
+  font-family: 'Poppins';
+  font-size: 1.4vw;
+  float:right;
+  margin-top: 1vw;
+  margin-bottom: 1vw;
+}
+
+.submit-signup:hover{
+  background-color: #206b20;
+}
+
+.sign-up-header{  
+  font-size: 2.5vw;
+  font-family: 'Poppins';
+  text-align: center;
+  font-weight: bold;
+}
+
+.signin-div{
+  display: flex;
+  flex-direction: row;
+  gap:0.3vw;
+  align-items: center;
+}
+
+.signup-button-signin{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.signin-labels{
+  font-family: 'Inter';
+  font-size: 1vw;
+}
+
+.username-signup, .password-signup{
+  border: 2px #47c2f3 solid;
+  padding:0.4vw;
+  border-radius: 5px;
+  color:black;
+  font-size:1vw;
+  font-family:'Inter';
+  background-color: rgb(243, 232, 245);
+}
+
+.username-signup:hover, .password-signup:hover{
+  border:2px solid #10b2f1;
+}
+
+
+/* #endregion */

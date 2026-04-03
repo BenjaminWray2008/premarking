@@ -5,11 +5,11 @@
 
   <form method="POST">
     <div class="div-center-multi">
-      <button type="submit" class="submit-buttons">Submit</button>
+      <button type="submit" class="logout-button logout">Submit</button>
     </div>
     <div class='dropdown' id="dropdown">
       {% for standard in standards %}
-      <button type="button" class="standard-buttons submit-buttons" data-standard="{{standard}}">{{standard}}</button>
+      <button type="button" class="standard-buttons logout-button logout" data-standard="{{standard}}">{{standard}}</button>
       {% endfor %}
     </div>
 
@@ -71,6 +71,7 @@
 
     if (listy[tier]) {
       div.style.color = listy[tier];
+
     }
   });
 

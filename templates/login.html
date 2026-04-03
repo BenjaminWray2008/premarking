@@ -1,15 +1,22 @@
 {% extends 'layout.html' %} {% block content %}
-
-<form method="POST">
-    <div>
-        {{form.UEmail.label}}
-        {{form.UEmail()}}
+<div class="sign-up-page">
+<div class="total-sign-up">
+    <h1 class="sign-up-header">Sign in to Premarking</h1>
+    <hr class="home-page-flex-line signup-page-flex-line" />
+    <form method="POST">
+      <div class="details-div">
+        {{form.UEmail.label(class="signup-labels")}}
+        {{form.UEmail(class="password-signup")}}
         <br>
-        {{form.UPass.label}}
-        {{form.UPass()}}
-        <button type="submit">ye</button>
-
-    </div>
-</form>
+        {{form.UPass.label(class="signup-labels")}}
+        {{form.UPass(class="password-signup")}}
+        <br />
+        <button type="submit" class="submit-signup signup-labels">Signin!</button>
+      </div>
+    </form>
+  </div>
+  </div>
 
 {% endblock %}
+
+

@@ -46,6 +46,7 @@ login_manager.login_view = "login"
 db = SQLAlchemy()
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 db.init_app(app)
+# Need to make it so on email update marked status
 
 
 class Base(DeclarativeBase):
@@ -372,7 +373,7 @@ def profile():
         unmarked_count = 0
         projects = []
         for i in user_projects:
-            if i.marked == 1:
+            if i.marked:
                 premarked = 'Premarked'
                 marked_count += 1
             else:
@@ -451,12 +452,16 @@ def clean(project_id, user_id):
     q = select(User).where(User.id == user_id)
     with Session(engine) as sql_session:
         user = sql_session.scalar(q)
-    email = user.email
-    path = 'email.pdf'
-    turn_to_pdf(html, path)
-    send_email(email, path, type, snu, UData.name)
-    print('EMAIL SENT')
+        user_project = sql_session.scalar(select(UserProject).where(UserProject.project_id == project_id).where(UserProject.user_id == user_id).where(UserProject.admin_id == current_user.id))
+        print(user_project, user_project.marked, user_project.doc)
+        user_project.marked = True
 
+        email = user.email
+        path = 'email.pdf'
+        turn_to_pdf(html, path)
+        send_email(email, path, type, snu, UData.name)
+        print('EMAIL SENT')
+        sql_session.commit()
     return redirect(url_for('profile'))
 
 
