@@ -11,12 +11,18 @@
 <body>
     <div class="navbar">
         <h1 class="site-name">Project Premarking</h1>
-        <div class="div-row">
+        <div class="div-row high">
         {% if searchBar %}
         <input class="searchbar" type="text" id="searchbar" placeholder="Search for a Student:">
         {% endif %}
+
+        {% if backto %}
+        <button class="logout-button logout" onclick="history.back()">Back to Projects</button>
+        {% endif %}
+  
         {% if current_user.is_authenticated %}
-        <form action="/logout">
+        
+        <form action="/logout" class="high">
             <button type="submit" class="logout-button logout">Logout!</button>
         </form>
         {% endif %}

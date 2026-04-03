@@ -10,6 +10,7 @@ html {
 h1{
     font-family: 'Poppins';
     font-size: 2.2vw;
+    color: rgb(26, 2, 50);
 }
 
 p{
@@ -17,34 +18,37 @@ p{
     font-size: 1.8vw;
     padding:0;
     margin:0;
+    color: rgb(26, 2, 50);
 }
 
 body{
     padding:0;
     margin:0;
+    background-color: rgb(237, 230, 230);
 }
 
 .navbar{
     width:100vw;
-    background-color: #358b35;
+    background: linear-gradient(to right, #0e4788, rgb(199, 145, 205) 80%);
+    
     padding-top:0;
     margin:0;
-    height:10vh;
+    height:8vh;
     display:flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    border-bottom: 1px black solid;
 
     
 }
 
 .logout-button{
-    margin-right:3vw;
-    padding:0.5vw;
+    width:12vw;
 }
 
 .proj-type{
-    text-align: center;
+    text-align: left;
 }
 
 .proj-page-layout{
@@ -60,9 +64,12 @@ body{
     display:flex;
     flex-direction: row;
     justify-content: space-between;
-    margin-left:30vw;
-    margin-right:30vw;
+    height: 4vw;
+    background-color: #10b2f1;
+    border-radius: 1vw;
+    width:fit-content;
 }
+    
 
 .submit-buttons{
     padding:0.5vw;
@@ -70,8 +77,27 @@ body{
     background-color:cyan;
 }
 
+.standard-buttons{
+    background-color: transparent;
+
+    padding:1vw 1vw 1vw 1vw;
+    margin: 0;
+    font-family: 'Inter';
+    font-size: 1.2vw;
+    border: none;
+
+}
+
+.project-buttons{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    height:4vw;
+}
+
 .standard-buttons:hover{
-    background-color:blue;
+    background-color:rgb(107, 239, 248);
 }
 
 .standard-name{
@@ -113,7 +139,8 @@ body{
 .line{
     width:100vw;
     background-color: black;
-    height:0.5vh;
+    height:0.3vh;
+    margin-top: 0;
 }
 
 input[type="checkbox"]{
@@ -152,17 +179,19 @@ textarea{
     font-family:'Inter';
     color:rgb(14, 17, 115);
     font-size: 1.8vw;
+    margin-bottom: 1vw;
 }
 
 .indiv-project{
-    width:25vw;
+    width:18vw;
     display: flex;
     align-items: center;
     flex-direction: column;
+    padding-top:1vw;
 }
 
 .between-projects{
-    margin:2vw 0vw 0 0;
+    margin:1.2vw 0vw 0 0;
     width:100%;
     
 }
@@ -187,7 +216,7 @@ textarea{
 
 .projects{
     display:grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
     gap:5vw;
     margin-top:1vw;
     
@@ -205,10 +234,10 @@ textarea{
 .project-user-name{
     margin-bottom: 1vw;
     margin-top:0;
+    text-align: center;
 }
 
 .searchbar{
-    margin-right:2vw;
     padding:0.4vw;
     border-radius: 5px;
     border:1px black solid;
@@ -218,13 +247,14 @@ textarea{
 }
 
 .logout{
-    background-color: rgb(231, 255, 249);
+    height:100%;
+    background-color: transparent;
     font-family: 'Inter';
-    padding:0.4vw;
-    border-radius: 5px;
-    border:1px black solid;
     font-size: 1vw;
-    color:black;
+    color:rgb(48, 5, 166);
+    border:none;
+    text-decoration: underline;
+
     }
 
 .logout:hover{
@@ -233,6 +263,7 @@ textarea{
 
 .site-name{
     margin-left:2vw;
+    color: whitesmoke;
 }
 
 .top-project{
@@ -253,7 +284,7 @@ textarea{
 }
 
 .marked, .unmarked{
-    margin-top:1vw;
+    margin-top: 0.3vw;
     padding:0.3vw;
     border-radius: 1vw;
 }
@@ -278,6 +309,17 @@ textarea{
 .top-button:hover{
     background-color: rgb(228, 102, 250);
     font-weight: bolder;
+}
+
+.inline-div{
+    display:flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+
+.high{
+    height:100%;
 }
 
 
@@ -366,6 +408,27 @@ textarea{
 
 .username-signup:hover, .password-signup:hover{
   border:2px solid #10b2f1;
+}
+
+.email-student{
+    background-color: rgb(218, 133, 237);
+    height:4vw;
+    width: 25vh;
+    font-family: "Inter";
+    font-size: 1.2vw;
+    border-radius: 0.5vw;
+    position: absolute;
+    right: 2vw;
+    border: none;
+}
+
+.email-student-div{
+    
+}
+
+.email-student:hover{
+    text-decoration: underline;
+    background-color: #a132ec;
 }
 
 

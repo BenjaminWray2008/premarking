@@ -11,9 +11,10 @@
                 <br>
                 Marked: {{counts[0]}}
                 <br><br>
-                <a href="instructions" class="project-link">Add new student projects:</a>
+                
             </p>
         </div>
+        <a href="instructions" class="project-link">Add new student projects:</a>
 
     </div>
     <div class="projects">
@@ -21,7 +22,7 @@
 
         <div class="indiv-project" name="project-{{project['user_id']}}">
             <div class="centre-projects">
-                <h1 class="project-user-name">{{project['user']}}</h1>
+                <p class="project-user-name">{{project['user']}}</p>
                 <a href="project/{{project['projstand']}}/{{project['user_id']}}"
                     class="project-link">{{project['type']}} Project</a>
                 <p class="{% if project['marked'] == 'Premarked' %}marked{% else %}unmarked{% endif %}">
@@ -49,9 +50,9 @@
             search.forEach(item => {
                 item.scrollIntoView()
                 item.scrollIntoView({ behavior: "smooth", block: "center" });
-                item.style.backgroundColor = "green";
-                item.style.borderTopLeftRadius = '1vw';
-                item.style.borderTopRightRadius = '1vw';
+                item.style.backgroundColor = "beige";
+                item.style.borderTopLeftRadius = '0.5vw';
+                item.style.borderTopRightRadius = '0.5vw';
             })
         }
     }

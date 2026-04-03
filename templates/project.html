@@ -1,27 +1,35 @@
 {% extends 'layout.html' %} {% block content %}
-<div class="proj-page-layout">
-  <button class="submit-buttons" onclick="history.back()">Back to Projects:</button>
-  <h1 class="proj-type">{{UData.name}}: {{type}} <br> {{UData.email}}</h1>
+<form method="POST">
+  <div class="proj-page-layout">
+    <div class="inline-div">
 
-  <form method="POST">
-    <div class="div-center-multi">
-      <button type="submit" class="logout-button logout">Submit</button>
-    </div>
-    <div class='dropdown' id="dropdown">
-      {% for standard in standards %}
-      <button type="button" class="standard-buttons logout-button logout" data-standard="{{standard}}">{{standard}}</button>
-      {% endfor %}
+      <div class="inline-div gap">
+        <h1 class="proj-type">{{UData.name}}: {{type}}</h1>
+        <h1>{{UData.email}}</h1>
+        
+      </div>
+
     </div>
 
+    <div class="project-buttons">
+      <div class='dropdown' id="dropdown">
+        {% for standard in standards %}
+        <button type="button" class="standard-buttons" data-standard="{{standard}}">{{standard}}</button>
+        {% endfor %}
+      </div>
 
+      <button type="submit" class="email-student">Email Student Progress Report</button>
+
+    </div>
     {% for standard in standards %}
     <div class="dropdown-standards" id="div-{{standard}}">
-      <h1 class="standard-name">{{standard}}</h1>
+      <!-- <h1 class="standard-name">{{standard}}</h1> -->
 
       {% for tier in standards[standard] %}
       <div>
         <div class="tier-div">
-          <h1 class="tier-tag" data-tier="{{ (tier.keys() | list | first)[0] }}">{{ (tier.keys() | list | first)[0] }} Criteria
+          <h1 class="tier-tag" data-tier="{{ (tier.keys() | list | first)[0] }}">{{ (tier.keys() | list | first)[0] }}
+            Criteria
           </h1>
         </div>
         {% for tick in tier[tier.keys() | list | first ] %}
@@ -40,7 +48,7 @@
     </div>
     {% endfor %}
 
-</div>
+  </div>
 
 
 </form>
@@ -51,11 +59,17 @@
 <script>
   const buttons = document.querySelectorAll('.standard-buttons')
   buttons.forEach(btn => {
+
     btn.addEventListener('click', function () {
       document.querySelectorAll(".dropdown-standards").forEach(div => {
         div.style.display = "none";
+
       });
       const cur = this.dataset.standard
+      buttons.forEach(button => {
+        button.style.backgroundColor = ''
+      })
+      this.style.backgroundColor = 'cyan'
       const current = document.getElementById('div-' + cur)
 
       if (current) {

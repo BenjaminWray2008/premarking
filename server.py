@@ -434,7 +434,7 @@ def project(project_id, user_id):
     UData, type, standards, snu = standard_data(project_id, user_id)
     return render_template('project.html',
                            standards=standards, type=type,
-                           UData=UData, snu=snu)
+                           UData=UData, snu=snu, backto = True)
 
 
 @app.route('/clean/<int:project_id>/<int:user_id>')
