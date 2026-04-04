@@ -434,7 +434,7 @@ def project(project_id, user_id):
     UData, type, standards, snu = standard_data(project_id, user_id)
     return render_template('project.html',
                            standards=standards, type=type,
-                           UData=UData, snu=snu, backto = True)
+                           UData=UData, snu=snu, backto=True)
 
 
 @app.route('/clean/<int:project_id>/<int:user_id>')
@@ -443,11 +443,33 @@ def clean(project_id, user_id):
     tickValues = session.get('ticks', [])
     textValues = session.get('texts', [])
     UData, type, standards, snu = standard_data(project_id, user_id)
+    listy = {standard: 3 for standard in standards}
+    print(standards)
+    grades = ['Not Achieved', 'Achieved', 'Merit', 'Excellence']
+    for standard in standards:
+        for tiers in standards[standard]:
+            for tier in tiers:
+                for tick in tiers[tier]:
+                    if f'{standard}-{tick}' not in tickValues:
+                        print(tick)
+                        grade_index = grades.index(tier[0])-1
+                        if grade_index < listy[standard]:
+                            listy[standard] = grade_index
+
+                        
+    
+    print('faile:', listy)
+    for standard in listy:
+        listy[standard] = grades[listy[standard]]
+    print(listy)
+    
+
+    print('ticks', tickValues)
 
     html = render_template('clean.html',
                            standards=standards, type=type,
                            UData=UData, tickValues=tickValues,
-                           textValues=textValues)
+                           textValues=textValues, listy=listy)
 
     q = select(User).where(User.id == user_id)
     with Session(engine) as sql_session:

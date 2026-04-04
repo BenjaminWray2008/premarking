@@ -11,29 +11,34 @@
 <body>
     <div class="proj-page-layout">
 
-        <h1 class="proj-type">{{UData.name}}: {{type}} <br> {{UData.email}}</h1>
+        <h2 class="proj-type-clean">{{UData.name}}: {{type}} <br> {{UData.email}}</h2>
 
 
         {% for standard in standards %}
-        <h1 class="standard-name">{{standard}}</h1>
+        <h2 class="standard-name">{{standard}}</h2>
         <div class="dropdown-standards-clean">
 
             {% for tier in standards[standard] %}
             <div>
                 <div class="tier-div {{ (tier.keys() | list | first)[1]}}">
-                    <h1 class="tier-name">{{ tier.keys() | list | first | first}}</h1>
+                    <h2 class="tier-name">{{ tier.keys() | list | first | first}}</h2>
                 </div>
                 {% for tick in tier[tier.keys() | list | first ] %}
-                    <h1 class="clean-tick-tick">{{tick}} - {% if standard ~ '-' ~ tick in tickValues %}Completed!{% else %}Not Completed!{% endif %}</h1>
+                    <p class="clean-tick-tick">{{tick}} - {% if standard ~ '-' ~ tick in tickValues %}Completed!{% else %}Not Completed!{% endif %}</p>
+                    <br>
                     <p>{% if textValues[standard ~ '-' ~ tick] %}{{ textValues[standard ~ '-' ~ tick] }}{% else %}No Feedback Required!{% endif %}</p>
+                    <br><br>
                 {% endfor %}
             </div>
+          
             {% endfor %}
 
         </div>
         <br>
         <div class="line"></div>
+        <h2 class="proj-type-clean">You currently will get {{listy[standard]}} for this standard!</h2>
         <br>
+        
         {% endfor %}
 
     </div>

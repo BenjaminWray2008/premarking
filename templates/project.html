@@ -3,8 +3,8 @@
   <div class="proj-page-layout">
     <div class="inline-div">
 
-      <div class="inline-div gap">
-        <h1 class="proj-type">{{UData.name}}: {{type}}</h1>
+      <div class="name-type">
+        <h1 class="proj-type">{{UData.name}}: {{type}} Project</h1>
         <h1>{{UData.email}}</h1>
         
       </div>
@@ -34,7 +34,7 @@
         </div>
         {% for tick in tier[tier.keys() | list | first ] %}
         <div class="tick-div">
-          <div class="div-row check-tick">
+          <div class="check-tick">
             <p class="tick-tag">{{tick}}</p>
             <input type="checkbox" name="ticks" value="{{standard}}-{{tick}}">
           </div>
@@ -69,11 +69,13 @@
       buttons.forEach(button => {
         button.style.backgroundColor = ''
       })
-      this.style.backgroundColor = 'cyan'
+      this.style.backgroundColor = '#8575B4'
+      // rgb(30, 160, 216)
+
       const current = document.getElementById('div-' + cur)
 
       if (current) {
-        current.style.display = 'block'
+        current.style.display = 'grid'
       }
     })
   })
