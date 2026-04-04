@@ -15,13 +15,13 @@
 
 
         {% for standard in standards %}
-        <h2 class="standard-name">{{standard}}</h2>
+        <h2 class="standard-name-clean">{{standard}}</h2>
         <div class="dropdown-standards-clean">
 
             {% for tier in standards[standard] %}
             <div>
                 <div class="tier-div {{ (tier.keys() | list | first)[1]}}">
-                    <h2 class="tier-name">{{ tier.keys() | list | first | first}}</h2>
+                    <h2 class="tier-name-clean">{{ tier.keys() | list | first | first}}</h2>
                 </div>
                 {% for tick in tier[tier.keys() | list | first ] %}
                     <p class="clean-tick-tick">{{tick}} - {% if standard ~ '-' ~ tick in tickValues %}Completed!{% else %}Not Completed!{% endif %}</p>

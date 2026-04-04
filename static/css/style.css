@@ -53,6 +53,7 @@ body{
 
 .proj-type-clean{
     text-align: center;
+    font-family: 'Poppins';
 }
 
 .proj-page-layout{
@@ -115,9 +116,20 @@ body{
     text-align: center;
 }
 
+.standard-name-clean{
+    text-align: center;
+    font-family: 'Poppins'
+}
+
 .tier-name{
     text-align: center;
     font-size: 0.5vw;
+}
+
+.tier-name-clean{
+    text-align: center;
+    font-size: 0.5vw;
+    font-family: 'Poppins';
 }
 
 .div-center-multi{

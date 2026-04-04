@@ -251,6 +251,9 @@ def new_user(file, selected):
     with Session(engine) as sql_session:
         for index, row in enumerate(reader):
             if index == 0:
+                print(row)
+                if row != ['Student ID', 'Last Name', 'First Name', 'Gender', 'Level', 'Tutor', 'Timetable Class', '']:
+                    return 'hi'
                 continue
             id = row[0]
             surname = row[1]
@@ -315,6 +318,9 @@ def login():
         q = select(Admin).where(Admin.email == UEmail)
         with Session(engine) as session:
             creds = session.scalar(q)
+
+        if not creds:
+            return render_template('login.html', form=form)
 
         id = creds.id
         hash = creds.hash
