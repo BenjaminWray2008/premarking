@@ -45,7 +45,6 @@ login_manager.login_view = "login"
 db = SQLAlchemy()
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 db.init_app(app)
-# Need to make it so on email update marked status
 
 
 class Base(DeclarativeBase):
@@ -162,6 +161,7 @@ class Tick(Base):
 
 engine = create_engine("sqlite:///instance/database.db")
 # Base.metadata.create_all(engine)
+# For database recreation
 
 
 class Login(Form):
@@ -172,22 +172,19 @@ class Login(Form):
 class NewUser(FlaskForm):
     file = FileField('Browse Files:', validators=[
         FileRequired(), FileAllowed(['csv'], 'CSV only')
-        ])
+        ])  # File field in instructions
     dropdown = SelectField('Select', choices=[])
     upload = SubmitField('Upload')
 
 
-def submit(ticks):
-    return 'hi'
-
-
-def turn_to_pdf(html, email):
+def turn_to_pdf(html, email):  # turn rendered template to html file
     css = CSS(filename='static/css/style.css')
     html = HTML(string=html)
     html.write_pdf(email, stylesheets=[css])
 
 
 def send_email(email, path, proj_type, assess_num, user_name):
+    # Email content
     msg = EmailMessage()
     msg['Subject'] = f'Feedback for {assess_num}'
     msg['From'] = 'premarkingsoftware@gmail.com'
@@ -201,6 +198,7 @@ def send_email(email, path, proj_type, assess_num, user_name):
         msg.add_attachment(pdf, maintype='application',
                            subtype='pdf', filename='file.pdf')
 
+    # Send email
     with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
         smtp.login('premarkingsoftware@gmail.com', 'tbub hjpc dgzu cpjl')
         smtp.send_message(msg)
@@ -212,11 +210,13 @@ def standard_data(project_id, user_id):
     standards = {}
 
     with Session(engine) as sql_session:
+        # All standards for a project type
         q = select(ProjectStandard).where(
             ProjectStandard.project_id == project_id)
         ProjStand = sql_session.scalars(q).all()
 
         for standard in ProjStand:
+            # All ticks for a standard
             q = select(Tick).where(
                 Tick.standard_id == standard.standard_id)
 
@@ -224,11 +224,12 @@ def standard_data(project_id, user_id):
 
             groups = defaultdict(list)
             for tick in Ticks:
+                # Group all ticks of a tier (e.g. E)
                 groups[tick.tier].append(tick.tick)
 
             sn = str(standard.standard.name)
             snu = str(standard.standard.number)
-
+            # Group all tiered tick lists within each standard
             standards[sn + ' ' + snu] = [
                 {(tier, cor[tier]): groups[tier]}
                 for tier in order if groups[tier]
