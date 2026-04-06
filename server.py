@@ -18,7 +18,6 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
 from typing import List
 from wtforms import (Form,
-                     BooleanField,
                      StringField,
                      validators,
                      PasswordField,
@@ -252,7 +251,10 @@ def new_user(file, selected):
         for index, row in enumerate(reader):
             if index == 0:
                 print(row)
-                if row != ['Student ID', 'Last Name', 'First Name', 'Gender', 'Level', 'Tutor', 'Timetable Class', '']:
+                if row != [
+                    'Student ID', 'Last Name', 'First Name',
+                    'Gender', 'Level', 'Tutor', 'Timetable Class', ''
+                     ]:
                     return 'hi'
                 continue
             id = row[0]
@@ -299,6 +301,11 @@ def load_user(user_id):
     with Session(engine) as session:
         obj = session.scalar(query)
     return obj
+
+
+@app.errorhandler(404)
+def stoptryingtohack(i):  # 404 page runner
+    return render_template('404.html')
 
 
 @app.route('/', methods=['POST', 'GET'])
@@ -363,7 +370,7 @@ def instructions():
         if request.method == 'POST':
             print("ERRORS:", form.errors)
 
-    return render_template('instructions.html', form=form)
+    return render_template('instructions.html', form=form, backto=True)
 
 
 @app.route('/profile', methods=['POST', 'GET'])
@@ -461,14 +468,10 @@ def clean(project_id, user_id):
                         grade_index = grades.index(tier[0])-1
                         if grade_index < listy[standard]:
                             listy[standard] = grade_index
-
-                        
-    
     print('faile:', listy)
     for standard in listy:
         listy[standard] = grades[listy[standard]]
     print(listy)
-    
 
     print('ticks', tickValues)
 
@@ -480,7 +483,11 @@ def clean(project_id, user_id):
     q = select(User).where(User.id == user_id)
     with Session(engine) as sql_session:
         user = sql_session.scalar(q)
-        user_project = sql_session.scalar(select(UserProject).where(UserProject.project_id == project_id).where(UserProject.user_id == user_id).where(UserProject.admin_id == current_user.id))
+        user_project = sql_session.scalar(
+            select(UserProject).where(
+                UserProject.project_id == project_id).where(
+                    UserProject.user_id == user_id).where(
+                        UserProject.admin_id == current_user.id))
         print(user_project, user_project.marked, user_project.doc)
         user_project.marked = True
 

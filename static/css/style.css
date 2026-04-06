@@ -462,10 +462,6 @@ textarea{
     text-decoration: underline;
 }
 
-.email-student-div{
-    
-}
-
 .email-student:hover{
     text-decoration: underline;
     background-color: #a132ec;
@@ -473,3 +469,53 @@ textarea{
 
 
 /* #endregion */
+
+
+.instructions-header{
+    text-align: center;
+}
+
+.instructions-page{
+    margin: 0 2vw 0 2vw;
+}
+
+.file-inputs{
+    display: flex;
+    flex-direction: column;
+    gap: 2vw;
+}
+
+.instruction{
+    margin-bottom: 1vw;
+}
+
+.file{
+    display:none;
+}
+
+.file-label{
+    border: 2px black solid;
+    background-color: #a4ccf9;
+    border-radius: 5px;
+    padding:0.3vw;
+    font-family: 'Inter';
+    font-size:0.8vw;
+}
+
+.file-label:hover{
+    background-color: #8575B4;
+}
+
+.dropdown-instructions{
+    border: 2px black solid;
+    background-color: #a4ccf9;
+    border-radius: 5px;
+    padding:0.3vw;
+    font-family: 'Inter';
+    font-size:0.8vw;
+}
+
+.file-name-text{
+    font-family: 'Inter';
+}
+

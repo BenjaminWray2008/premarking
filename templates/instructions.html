@@ -1,15 +1,49 @@
 {% extends 'layout.html' %} {% block content %}
-<a href="profile" class="project-link">Back to Profile -></a>
-<h1>Instructions to add new projects:</h1>
-<p>blah blah blah</p>
-<form method="POST" enctype="multipart/form-data">
-            <p>Add Projects:</p>
-            {{ form.hidden_tag() }}
-            {{ form.file() }}
-            {{ form.dropdown.label }}
-            {{ form.dropdown() }}
-            {{ form.upload.label }}
-            {{ form.upload() }}
+<div class="instructions-page">
+    <h1 class="instructions-header">Instructions to add new Student Projects:</h1>
+    <form method="POST" enctype="multipart/form-data" class="file-inputs">
+        <div>
+            <p class="instruction">"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+                dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
+                ex
+                ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
+                fugiat
+                nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt
+                mollit
+                anim id est laborum."</p>
 
-        </form>
+            {{ form.hidden_tag() }}
+            <label for="file" class="file-label">Choose CSV:</label>
+            {{ form.file(id="file", class="file") }}
+            <span id="file-name" class="file-name-text">No file selected</span>
+        </div>
+        <div>
+        <p class="instruction">"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+            dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex
+            ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat
+            nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit
+            anim id est laborum."</p>
+<!-- 
+        <label for="dropdown" class="dropdown-instructions-label">Select Project Type:</label> -->
+        {{ form.dropdown(id="dropdown", class="dropdown-instructions") }}
+    
+</div>
+<div>
+    <p class="instruction">"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+        dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex
+        ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat
+        nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit
+        anim id est laborum."</p>
+
+    {{ form.upload(class="file-label") }}
+</div>
+</form>
+</div>
+
+<script>
+document.getElementById("file").addEventListener("change", function() {
+    const fileName = this.files.length > 0 ? this.files[0].name : "No file selected";
+    document.getElementById("file-name").textContent = fileName;
+});
+</script>
 {% endblock %}
