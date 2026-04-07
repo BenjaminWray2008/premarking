@@ -6,7 +6,6 @@
       <div class="name-type">
         <h1 class="proj-type">{{UData.name}}: {{type}} Project</h1>
         <h1>{{UData.email}}</h1>
-        
       </div>
 
     </div>
@@ -17,14 +16,11 @@
         <button type="button" class="standard-buttons" data-standard="{{standard}}">{{standard}}</button>
         {% endfor %}
       </div>
-
       <button type="submit" class="email-student">Email Student Progress Report</button>
-
     </div>
+
     {% for standard in standards %}
     <div class="dropdown-standards" id="div-{{standard}}">
-      <!-- <h1 class="standard-name">{{standard}}</h1> -->
-
       {% for tier in standards[standard] %}
       <div>
         <div class="tier-div">
@@ -32,48 +28,41 @@
             Criteria
           </h1>
         </div>
+
         {% for tick in tier[tier.keys() | list | first ] %}
         <div class="tick-div">
           <div class="check-tick">
             <p class="tick-tag">{{tick}}</p>
             <input type="checkbox" name="ticks" value="{{standard}}-{{tick}}">
           </div>
-
           <textarea wrap="hard" name="texts[{{standard}}-{{tick}}]" placeholder="Feedback:" maxlength="50"></textarea>
         </div>
+
         {% endfor %}
       </div>
       {% endfor %}
-
     </div>
     {% endfor %}
 
   </div>
-
-
 </form>
-
-
-
 
 <script>
   const buttons = document.querySelectorAll('.standard-buttons')
-  buttons.forEach(btn => {
 
+  buttons.forEach(btn => {
     btn.addEventListener('click', function () {
       document.querySelectorAll(".dropdown-standards").forEach(div => {
         div.style.display = "none";
-
       });
+
       const cur = this.dataset.standard
       buttons.forEach(button => {
         button.style.backgroundColor = ''
       })
       this.style.backgroundColor = '#8575B4'
-      // rgb(30, 160, 216)
 
       const current = document.getElementById('div-' + cur)
-
       if (current) {
         current.style.display = 'grid'
       }
@@ -87,12 +76,8 @@
 
     if (listy[tier]) {
       div.style.color = listy[tier];
-
     }
   });
-
-
-
 </script>
 
 

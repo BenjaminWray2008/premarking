@@ -24,13 +24,15 @@
                     <h2 class="tier-name-clean">{{ tier.keys() | list | first | first}}</h2>
                 </div>
                 {% for tick in tier[tier.keys() | list | first ] %}
-                    <p class="clean-tick-tick">{{tick}} - {% if standard ~ '-' ~ tick in tickValues %}Completed!{% else %}Not Completed!{% endif %}</p>
-                    <br>
-                    <p>{% if textValues[standard ~ '-' ~ tick] %}{{ textValues[standard ~ '-' ~ tick] }}{% else %}No Feedback Required!{% endif %}</p>
-                    <br><br>
+                <p class="clean-tick-tick">{{tick}} - {% if standard ~ '-' ~ tick in tickValues %}Completed!{% else
+                    %}Not Completed!{% endif %}</p>
+                <br>
+                <p>{% if textValues[standard ~ '-' ~ tick] %}{{ textValues[standard ~ '-' ~ tick] }}{% else %}No
+                    Feedback Required!{% endif %}</p>
+                <br><br>
                 {% endfor %}
             </div>
-          
+
             {% endfor %}
 
         </div>
@@ -38,7 +40,7 @@
         <div class="line"></div>
         <h2 class="proj-type-clean">You currently will get {{listy[standard]}} for this standard!</h2>
         <br>
-        
+
         {% endfor %}
 
     </div>

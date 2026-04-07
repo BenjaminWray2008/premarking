@@ -1,457 +1,99 @@
-
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
-
-html {
-  scroll-behavior: smooth;
-}
-
-h1{
-    font-family: 'Poppins';
-    font-size: 2.2vw;
-    color: rgb(26, 2, 50);
-}
-
-p{
-    font-family: 'Inter';
-    font-size: 1.8vw;
-    padding:0;
-    margin:0;
-    color: rgb(26, 2, 50);
-}
-
-body{
-    padding:0;
-    margin:0;
-    background-color: rgb(237, 230, 230);
-}
-
-.navbar{
-    width:100vw;
-    background: linear-gradient(to right, #0e4788, rgb(199, 145, 205) 80%);
-    
-    padding-top:0;
-    margin:0;
-    height:8vh;
-    display:flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px black solid;
-
-    
-}
-
-.logout-button{
-    width:12vw;
-}
-
-.proj-type{
-    text-align: left;
-}
-
-.proj-type-clean{
-    text-align: center;
-    font-family: 'Poppins';
-}
-
-.proj-page-layout{
-
-    padding:2vw;
-}
-
-.dropdown-standards{
-    display:none;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 5vw;
-}
-
-.dropdown{
-    display:flex;
-    flex-direction: row;
-    justify-content: space-between;
-    height: 4vw;
-    background-color: #0e4788;
-    border-radius: 1vw;
-    width:fit-content;
-}
-
-.standard-buttons:not(:first-child) {
-  border-left: 2px solid black;
-}
-    
-
-.submit-buttons{
-    padding:0.5vw;
-    border:1px black solid;
-    background-color:cyan;
-}
-
-.standard-buttons{
-    background-color: transparent;
-
-    padding:1vw 1vw 1vw 1vw;
-    margin: 0;
-    font-family: 'Inter';
-    font-size: 1.2vw;
-    border: none;
-    color: whitesmoke;
-
-}
-
-.project-buttons{
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    height:4vw;
-}
-
-.standard-buttons:hover{
-    background-color:#8575B4;
-}
-
-.standard-name{
-    text-align: center;
-}
-
-.standard-name-clean{
-    text-align: center;
-    font-family: 'Poppins'
-}
-
-.tier-name{
-    text-align: center;
-    font-size: 0.5vw;
-}
-
-.tier-name-clean{
-    text-align: center;
-    font-size: 0.5vw;
-    font-family: 'Poppins';
-}
-
-.div-center-multi{
-    display:flex;
-    flex-direction: row;
-    justify-content: space-between;
-    justify-content: center;
-    margin-bottom:2vw;
-}
-
-.div-row{
-    display:flex;
-    flex-direction: row;
-    align-items: center;
-
-}
-
-
-.green{
-    background-color: rgb(4, 164, 4);
-}
-
-.blue{
-    background-color: rgb(57, 57, 250);
-}
-
-.yellow{
-    background-color: yellow;
-}
-
-.line{
-    width:100vw;
-    background-color: black;
-    height:0.3vh;
-    margin-top: 0;
-}
-
-input[type="checkbox"]{
-    height:1.5vw;
-    width:1.5vw;
-    margin:0;
-    padding:0;
-    flex-shrink: 0;
-}
-
-textarea{
-    height:3vw;
-    width:100%;
-}
-
-.tick-tag{
-    font-size:1vw;
-    margin-right: 1vw;
-}
-
-.tier-tag{
-    margin-top:2vw;
-    margin-bottom:2vw;
-}
-
-.tick-div{
-    margin:0;
-    padding:0;
-    margin-bottom:2.5vw;
-}
-
-.check-tick{
-    margin-bottom: 1vw;
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    height: 5vw;
-}
-
-.project-link{
-    font-family:'Inter';
-    color:rgb(14, 17, 115);
-    font-size: 1vw;
-    margin-bottom: 1vw;
-}
-
-.indiv-project{
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    padding-top:1vw;
-}
-
-.between-projects{
-    margin:1.2vw 0vw 0 0;
-    width:100%;
-    
-}
-
-.project-link:hover{
-    color:rgb(12, 9, 172);
-    background-color: whitesmoke;
-    border-radius: 1vw;
-}
-
-.centre-projects{
-    display:flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.logged-in{
-    text-align: center;
-    font-size: 3vw;
-    margin:0;
-}
-
-.projects{
-    display:grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-    gap:2vw;
-    margin-top:1vw;
-    
-    
-}
-
-.project-page{
-    display:flex;
-    flex-direction: column;
-    align-items: center;
-    margin-left:1vw;
-    margin-right:1vw;
-}
-
-.project-user-name{
-    margin-bottom: 1vw;
-    margin-top:0;
-    text-align: center;
-    font-size: 1.1vw;
-}
-
-.searchbar{
-    padding:0.4vw;
-    border-radius: 5px;
-    border:1px black solid;
-    font-size: 1vw;
-    color:black;
-    background-color: rgb(232, 243, 245);
-}
-
-.logout{
-    height:100%;
-    background-color: transparent;
-    font-family: 'Inter';
-    font-size: 1vw;
-    color:rgb(48, 5, 166);
-    border:none;
-    text-decoration: underline;
-
-    }
-
-.logout:hover{
-  color:rgb(227, 39, 136);
-}
-
-.site-name{
-    margin-left:2vw;
-    color: whitesmoke;
-}
-
-.top-project{
-    display:flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: flex-start;
-    width:90%;
-    padding-top:2vw;
-}
-
-.marked{
-    background-color: #008000;
-    
-}
-
-.unmarked{
-    background-color: rgb(243, 27, 56);
-}
-
-.marked, .unmarked{
-    margin-top: 0.3vw;
-    padding:0.3vw;
-    border-radius: 1vw;
-    font-size: 1vw;
-}
-
-.top-button{
-    display: none;
-    position:fixed;
-    bottom: 1vh;
-    right: 0.8vw;
-    z-index: 99;
-    background-color: rgb(242, 179, 253);
-    font-family: 'Inter';
-    padding:0.5vw;
-    border-radius: 5px;
-    border:none;
-    font-size: 1vw;
-    color:black;
-    font-weight: bold;
-    text-decoration: underline;
-}
-
-.top-button:hover{
-    background-color: rgb(228, 102, 250);
-    font-weight: bolder;
-}
-
-.inline-div{
-    display:flex;
-    flex-direction: row;
-    justify-content: center;
-    
-}
-
-.name-type{
-    gap: 4vw;
-    display: flex;
-    flex-direction: row;
-}
-
-
-.high{
-    height:100%;
-}
-
-
 /* #region Signin*/
 
-.total-sign-up{
-  padding:1vw;
-  padding-bottom: 0vw;
-  border:2px black solid;
-  border-radius: 0.75vw;
-  width: fit-content;
-  background-color: rgb(252, 251, 251);
+.total-sign-up {
+    padding: 1vw;
+    padding-bottom: 0vw;
+    border: 2px black solid;
+    border-radius: 0.75vw;
+    width: fit-content;
+    background-color: rgb(252, 251, 251);
 }
 
-.details-div{
-  display: flex;
-  flex-direction: column;
+.details-div {
+    display: flex;
+    flex-direction: column;
 }
 
-.sign-up-page{
-  padding:5vw;
-  display: flex;
-  justify-content: center;
+.sign-up-page {
+    padding: 5vw;
+    display: flex;
+    justify-content: center;
 }
 
-.signup-labels{
+.signup-labels {
     font-size: 1.4vw;
     margin: 0.9vh 0 0.9vh 0;
     font-family: 'Inter';
 }
 
-.signup-page-flex-line{
-  margin-bottom:1.5vw;
+.signup-page-flex-line {
+    margin-bottom: 1.5vw;
 }
 
-.submit-signup{
-  background-color: #358b35;
-  border:none;
-  border-radius: 0.75vw;
-  padding: 0.5vw 1vw 0.5vw 1vw;
-  font-family: 'Poppins';
-  font-size: 1.4vw;
-  float:right;
-  margin-top: 1vw;
-  margin-bottom: 1vw;
+.submit-signup {
+    background-color: #358b35;
+    border: none;
+    border-radius: 0.75vw;
+    padding: 0.5vw 1vw 0.5vw 1vw;
+    font-family: 'Poppins';
+    font-size: 1.4vw;
+    float: right;
+    margin-top: 1vw;
+    margin-bottom: 1vw;
 }
 
-.submit-signup:hover{
-  background-color: #206b20;
+.submit-signup:hover {
+    background-color: #206b20;
 }
 
-.sign-up-header{  
-  font-size: 2.5vw;
-  font-family: 'Poppins';
-  text-align: center;
-  font-weight: bold;
+.sign-up-header {
+    font-size: 2.5vw;
+    font-family: 'Poppins';
+    text-align: center;
+    font-weight: bold;
 }
 
-.signin-div{
-  display: flex;
-  flex-direction: row;
-  gap:0.3vw;
-  align-items: center;
+.signin-div {
+    display: flex;
+    flex-direction: row;
+    gap: 0.3vw;
+    align-items: center;
 }
 
-.signup-button-signin{
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.signup-button-signin {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-.signin-labels{
-  font-family: 'Inter';
-  font-size: 1vw;
+.signin-labels {
+    font-family: 'Inter';
+    font-size: 1vw;
 }
 
-.username-signup, .password-signup{
-  border: 2px #47c2f3 solid;
-  padding:0.4vw;
-  border-radius: 5px;
-  color:black;
-  font-size:1vw;
-  font-family:'Inter';
-  background-color: rgb(243, 232, 245);
+.username-signup,
+.password-signup {
+    border: 2px #47c2f3 solid;
+    padding: 0.4vw;
+    border-radius: 5px;
+    color: black;
+    font-size: 1vw;
+    font-family: 'Inter';
+    background-color: rgb(243, 232, 245);
 }
 
-.username-signup:hover, .password-signup:hover{
-  border:2px solid #10b2f1;
+.username-signup:hover,
+.password-signup:hover {
+    border: 2px solid #10b2f1;
 }
 
-.email-student{
+.email-student {
     background-color: #8575B4;
     color: whitesmoke;
-    height:4vw;
+    height: 4vw;
     width: 25vh;
     font-family: "Inter";
     font-size: 1.2vw;
@@ -462,7 +104,7 @@ textarea{
     text-decoration: underline;
 }
 
-.email-student:hover{
+.email-student:hover {
     text-decoration: underline;
     background-color: #a132ec;
 }
@@ -470,52 +112,408 @@ textarea{
 
 /* #endregion */
 
-
-.instructions-header{
+/* #region instructions */
+.instructions-header {
     text-align: center;
 }
 
-.instructions-page{
+.instructions-page {
     margin: 0 2vw 0 2vw;
 }
 
-.file-inputs{
+.file-inputs {
     display: flex;
     flex-direction: column;
     gap: 2vw;
 }
 
-.instruction{
+.instruction {
     margin-bottom: 1vw;
 }
 
-.file{
-    display:none;
+.file {
+    display: none;
 }
 
-.file-label{
+.file-label {
     border: 2px black solid;
     background-color: #a4ccf9;
     border-radius: 5px;
-    padding:0.3vw;
+    padding: 0.3vw;
     font-family: 'Inter';
-    font-size:0.8vw;
+    font-size: 0.8vw;
 }
 
-.file-label:hover{
+.file-label:hover {
     background-color: #8575B4;
 }
 
-.dropdown-instructions{
+.dropdown-instructions {
     border: 2px black solid;
     background-color: #a4ccf9;
     border-radius: 5px;
-    padding:0.3vw;
+    padding: 0.3vw;
     font-family: 'Inter';
-    font-size:0.8vw;
+    font-size: 0.8vw;
 }
 
-.file-name-text{
+.file-name-text {
     font-family: 'Inter';
 }
 
+/* #endregion */
+
+/* #region project and profile */
+
+.proj-type {
+    text-align: left;
+}
+
+.proj-type-clean {
+    text-align: center;
+    font-family: 'Poppins';
+}
+
+.proj-page-layout {
+    padding: 2vw;
+}
+
+.dropdown-standards {
+    display: none;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 5vw;
+}
+
+.dropdown {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    height: 4vw;
+    background-color: #0e4788;
+    border-radius: 1vw;
+    width: fit-content;
+}
+
+.standard-buttons:not(:first-child) {
+    border-left: 2px solid black;
+}
+
+.submit-buttons {
+    padding: 0.5vw;
+    border: 1px black solid;
+    background-color: cyan;
+}
+
+.standard-buttons {
+    background-color: transparent;
+
+    padding: 1vw 1vw 1vw 1vw;
+    margin: 0;
+    font-family: 'Inter';
+    font-size: 1.2vw;
+    border: none;
+    color: whitesmoke;
+}
+
+.project-buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    height: 4vw;
+}
+
+.standard-buttons:hover {
+    background-color: #8575B4;
+}
+
+.standard-name {
+    text-align: center;
+}
+
+.standard-name-clean {
+    text-align: center;
+    font-family: 'Poppins'
+}
+
+.tier-name {
+    text-align: center;
+    font-size: 0.5vw;
+}
+
+.tier-name-clean {
+    text-align: center;
+    font-size: 0.5vw;
+    font-family: 'Poppins';
+}
+
+.div-center-multi {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    justify-content: center;
+    margin-bottom: 2vw;
+}
+
+.div-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.green {
+    background-color: rgb(4, 164, 4);
+}
+
+.blue {
+    background-color: rgb(57, 57, 250);
+}
+
+.yellow {
+    background-color: yellow;
+}
+
+.line {
+    width: 100vw;
+    background-color: black;
+    height: 0.3vh;
+    margin-top: 0;
+}
+
+input[type="checkbox"] {
+    height: 1.5vw;
+    width: 1.5vw;
+    margin: 0;
+    padding: 0;
+    flex-shrink: 0;
+}
+
+textarea {
+    height: 3vw;
+    width: 100%;
+}
+
+.tick-tag {
+    font-size: 1vw;
+    margin-right: 1vw;
+}
+
+.tier-tag {
+    margin-top: 2vw;
+    margin-bottom: 2vw;
+}
+
+.tick-div {
+    margin: 0;
+    padding: 0;
+    margin-bottom: 2.5vw;
+}
+
+.check-tick {
+    margin-bottom: 1vw;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    height: 5vw;
+}
+
+.project-link {
+    font-family: 'Inter';
+    color: rgb(14, 17, 115);
+    font-size: 1vw;
+    margin-bottom: 1vw;
+}
+
+.indiv-project {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    padding-top: 1vw;
+}
+
+.between-projects {
+    margin: 1.2vw 0vw 0 0;
+    width: 100%;
+}
+
+.project-link:hover {
+    color: rgb(12, 9, 172);
+    background-color: whitesmoke;
+    border-radius: 1vw;
+}
+
+.centre-projects {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.logged-in {
+    text-align: center;
+    font-size: 3vw;
+    margin: 0;
+}
+
+.projects {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    gap: 2vw;
+    margin-top: 1vw;
+}
+
+.project-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-left: 1vw;
+    margin-right: 1vw;
+}
+
+.project-user-name {
+    margin-bottom: 1vw;
+    margin-top: 0;
+    text-align: center;
+    font-size: 1.1vw;
+}
+
+.searchbar {
+    padding: 0.4vw;
+    border-radius: 5px;
+    border: 1px black solid;
+    font-size: 1vw;
+    color: black;
+    background-color: rgb(232, 243, 245);
+}
+
+.logout {
+    height: 100%;
+    background-color: transparent;
+    font-family: 'Inter';
+    font-size: 1vw;
+    color: rgb(48, 5, 166);
+    border: none;
+    text-decoration: underline;
+}
+
+.logout:hover {
+    color: rgb(227, 39, 136);
+}
+
+.site-name {
+    margin-left: 2vw;
+    color: whitesmoke;
+}
+
+.top-project {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 90%;
+    padding-top: 2vw;
+}
+
+.marked {
+    background-color: #008000;
+}
+
+.unmarked {
+    background-color: rgb(243, 27, 56);
+}
+
+.marked,
+.unmarked {
+    margin-top: 0.3vw;
+    padding: 0.3vw;
+    border-radius: 1vw;
+    font-size: 1vw;
+}
+
+.top-button {
+    display: none;
+    position: fixed;
+    bottom: 1vh;
+    right: 0.8vw;
+    z-index: 99;
+    background-color: rgb(242, 179, 253);
+    font-family: 'Inter';
+    padding: 0.5vw;
+    border-radius: 5px;
+    border: none;
+    font-size: 1vw;
+    color: black;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.top-button:hover {
+    background-color: rgb(228, 102, 250);
+    font-weight: bolder;
+}
+
+.inline-div {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.name-type {
+    gap: 4vw;
+    display: flex;
+    flex-direction: row;
+}
+
+.high {
+    height: 100%;
+}
+
+/* #endregion */
+
+/* #region nav  */
+
+.navbar {
+    width: 100vw;
+    background: linear-gradient(to right, #0e4788, rgb(199, 145, 205) 80%);
+    padding-top: 0;
+    margin: 0;
+    height: 8vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px black solid;
+}
+
+.logout-button {
+    width: 12vw;
+}
+
+/* #endregion */
+
+/* #region globals  */
+
+html {
+    scroll-behavior: smooth;
+}
+
+h1 {
+    font-family: 'Poppins';
+    font-size: 2.2vw;
+    color: rgb(26, 2, 50);
+}
+
+p {
+    font-family: 'Inter';
+    font-size: 1.8vw;
+    padding: 0;
+    margin: 0;
+    color: rgb(26, 2, 50);
+}
+
+body {
+    padding: 0;
+    margin: 0;
+    background-color: rgb(237, 230, 230);
+}
+
+/* #endregion */

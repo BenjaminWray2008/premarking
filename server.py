@@ -236,23 +236,26 @@ def standard_data(project_id, user_id):
                   ]
         print(standards)
 
+        # Project class from id
         q = select(Project).where(Project.id == project_id)
         type = sql_session.scalar(q).type
 
+        # User class from id
         q = select(User).where(User.id == user_id)
         UData = sql_session.scalar(q)
     return (UData, type, standards, snu)
 
 
 def new_user(file, selected):
+    # Open file and read data
     stream = file.stream.read().decode("utf-8").splitlines()
-
     reader = csv.reader(stream)
+
     with Session(engine) as sql_session:
         for index, row in enumerate(reader):
             if index == 0:
                 print(row)
-                if row != [
+                if row != [  # If invalid CSV format
                     'Student ID', 'Last Name', 'First Name',
                     'Gender', 'Level', 'Tutor', 'Timetable Class', ''
                      ]:
@@ -263,42 +266,49 @@ def new_user(file, selected):
             first_name = row[2]
             year_level = row[4]
 
+            # If user in CSV already exists
             q = select(User).where(User.id == id)
             exist = sql_session.scalar(q)
 
+            # ID of selected project type
             q = select(Project).where(Project.type == selected)
             project_id = sql_session.scalar(q).id
 
+            # Find if a project exists already with selected data
             q = select(UserProject).where(
                 UserProject.user_id == id).where(
                     UserProject.project_id == project_id
                     ).where(UserProject.admin_id == current_user.id)
             proj_exist = sql_session.scalar(q)
 
+            # Skip that user to avoid repeats
             if proj_exist:
                 print('already done')
                 continue
-
+            
+            # Make new UserProject object
             new_project = UserProject(
                 user_id=id, project_id=project_id,
                 admin_id=current_user.id)
             db.session.add(new_project)
 
-            if exist:
+            if exist:  # If user already exists
                 continue
 
+            # Make new User object
             user = User(id=id, name=f"{first_name} {surname}",
                         year_level=year_level,
                         email=f'{id}@buurnside.school.nz', admin=False)
             db.session.add(user)
 
+        # Commit changes
         db.session.commit()
     return 'hi'
 
 
 @login_manager.user_loader
 def load_user(user_id):
-    query = select(Admin).where(Admin.id == user_id)
+    query = select(Admin).where(Admin.id == user_id)  # current user object
     with Session(engine) as session:
         obj = session.scalar(query)
     return obj
@@ -318,7 +328,9 @@ def home():
 def login():
     print(current_user)
     form = Login(request.form)
+    # Get form object
 
+    # If form has been submitted
     if request.method == 'POST':
         UEmail = form.UEmail.data
         UPass = form.UPass.data
@@ -327,19 +339,19 @@ def login():
         with Session(engine) as session:
             creds = session.scalar(q)
 
-        if not creds:
+        if not creds:  # If invalid admin submitted
             return render_template('login.html', form=form)
 
         id = creds.id
         hash = creds.hash
-        h = sha256()
+        h = sha256()  # Hash password
         h.update(UPass.encode())
         hashed = h.hexdigest()
-        if hashed != hash:
+        if hashed != hash:  # Compare against stored hash
             return render_template('login.html', form=form)
 
         user = Admin(id=id, username=UEmail)
-        login_user(user)
+        login_user(user)  # Log in that admin object
         return redirect(url_for('profile'))
     return render_template('login.html', form=form)
 
@@ -359,8 +371,10 @@ def instructions():
         q = select(Project)
         project_types = sql_session.scalars(q).all()
 
+    # Adding all project types as dropdown choices
     form.dropdown.choices = [i.type for i in project_types]
 
+    # If csv file has been added
     if form.validate_on_submit():
         file = form.file.data
         selected = form.dropdown.data
@@ -377,10 +391,10 @@ def instructions():
 @app.route('/profile', methods=['POST', 'GET'])
 @login_required
 def profile():
-
+    # All projects with logged in admin as admin
     AdProj = select(UserProject).where(
         UserProject.admin_id == current_user.id)
-    # User projects under current admin
+
     with Session(engine) as session:
         user_projects = session.scalars(AdProj).all()
         marked_count = 0
@@ -394,6 +408,7 @@ def profile():
                 premarked = 'Unmarked'
                 unmarked_count += 1
 
+            # Relevant project info
             projects.append({
                 'id': i.id,
                 'user': i.user.name,
@@ -409,13 +424,15 @@ def profile():
 
 @app.route('/search', methods=['POST', 'GET'])
 @login_required
-def search():
-    q = request.args.get("q", "")
+def search():  # On use of search bar
+    q = request.args.get("q", "")  # Get the arg for q in url
     data = []
     with Session(engine) as sql_session:
+        #  All user objects with name containing search query
         user_ids = sql_session.scalars(
             select(User).where(User.name.contains(q))).all()
         for user in user_ids:
+            # For each valid user find their project ID
             user_id = user.id
             result = sql_session.scalar(select(UserProject).where(
                 UserProject.user_id == user_id).where(
@@ -430,21 +447,25 @@ def search():
 @app.route('/project/<int:project_id>/<int:user_id>', methods=['POST', 'GET'])
 @login_required
 def project(project_id, user_id):
-
+    # If report submitted
     if request.method == 'POST':
+        # Get all checked items
         tickValues = request.form.getlist("ticks")
+        # Get the feedback from form
         form_data = request.form.to_dict()
         textValues = {}
         for key, value in form_data.items():
-            if key.startswith("texts["):
-                text = key[6:-1]
+            if key.startswith("texts["):  # If its a feedback item
+                text = key[6:-1]  # Remove the get the x from texts[x]
                 textValues[text] = value
 
+        # Store data in session to be grabbed on other route
         session['texts'] = textValues
         session["ticks"] = tickValues
         return redirect(url_for('clean',
                                 project_id=project_id, user_id=user_id))
 
+    # Get the relevant project data
     UData, type, standards, snu = standard_data(project_id, user_id)
     return render_template('project.html',
                            standards=standards, type=type,
@@ -454,47 +475,56 @@ def project(project_id, user_id):
 @app.route('/clean/<int:project_id>/<int:user_id>')
 @login_required
 def clean(project_id, user_id):
+    grades = ['Not Achieved', 'Achieved', 'Merit', 'Excellence']
+    # Get data back from session
     tickValues = session.get('ticks', [])
     textValues = session.get('texts', [])
+
     UData, type, standards, snu = standard_data(project_id, user_id)
     listy = {standard: 3 for standard in standards}
     print(standards)
-    grades = ['Not Achieved', 'Achieved', 'Merit', 'Excellence']
-    for standard in standards:
-        for tiers in standards[standard]:
-            for tier in tiers:
-                for tick in tiers[tier]:
-                    if f'{standard}-{tick}' not in tickValues:
+
+    for standard in standards:  # For every standard
+        for tiers in standards[standard]:  # For every tier group in that standard
+            for tier in tiers:  # The key of a tier group
+                for tick in tiers[tier]:  # For each tick in that tier group
+                    if f'{standard}-{tick}' not in tickValues:  # If tick hasn't been ticked
                         print(tick)
-                        grade_index = grades.index(tier[0])-1
+                        grade_index = grades.index(tier[0])-1  # Student can't get that grade for standard
                         if grade_index < listy[standard]:
-                            listy[standard] = grade_index
+                            listy[standard] = grade_index  # Change grade if it changed
     print('faile:', listy)
-    for standard in listy:
+    for standard in listy:  # Word name of each grade
         listy[standard] = grades[listy[standard]]
     print(listy)
 
     print('ticks', tickValues)
 
+    # Render the template
     html = render_template('clean.html',
                            standards=standards, type=type,
                            UData=UData, tickValues=tickValues,
                            textValues=textValues, listy=listy)
 
+    # Get the user object
     q = select(User).where(User.id == user_id)
     with Session(engine) as sql_session:
         user = sql_session.scalar(q)
+        # User project object
         user_project = sql_session.scalar(
             select(UserProject).where(
                 UserProject.project_id == project_id).where(
                     UserProject.user_id == user_id).where(
                         UserProject.admin_id == current_user.id))
         print(user_project, user_project.marked, user_project.doc)
+        # Make that project marked
         user_project.marked = True
 
         email = user.email
         path = 'email.pdf'
+        # Turn template to pdf format
         turn_to_pdf(html, path)
+        # Send the email with the pdf
         send_email(email, path, type, snu, UData.name)
         print('EMAIL SENT')
         sql_session.commit()

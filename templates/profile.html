@@ -11,7 +11,7 @@
                 <br>
                 Unmarked: {{counts[1]}}
                 <br><br>
-                
+
             </p>
         </div>
         <a href="instructions" class="project-link">Add new student projects:</a>
@@ -57,7 +57,7 @@
         }
     }
     const topButton = document.getElementById('top')
-    
+
     function scroll() {
         if (document.body.scrollTop > 50 || document.documentElement.scrollTop > 50) {
             topButton.style.display = "block";
@@ -67,14 +67,14 @@
         }
     }
 
-    topButton.onclick = function() {
+    topButton.onclick = function () {
         window.scrollTo({
             top: 0
         })
     }
 
-    
-    window.onscroll = function() {
+
+    window.onscroll = function () {
         scroll()
     }
 
