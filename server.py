@@ -319,6 +319,11 @@ def stoptryingtohack2(i):  # 405 page runner
     return render_template('405.html')
 
 
+@app.errorhandler(505)
+def stoptryingtohack3(i):  # 505 page runner
+    return render_template('505.html')
+
+
 @app.errorhandler(404)
 def stoptryingtohack(i):  # 404 page runner
     return render_template('404.html')
@@ -506,15 +511,22 @@ def clean(project_id, user_id):
     listy = {standard: 3 for standard in standards}
     print(standards)
 
-    for standard in standards:  # For every standard
-        for tiers in standards[standard]:  # For every tier group in that standard
-            for tier in tiers:  # The key of a tier group
-                for tick in tiers[tier]:  # For each tick in that tier group
-                    if f'{standard}-{tick}' not in tickValues:  # If tick hasn't been ticked
+    # For every standard
+    for standard in standards:
+        # For every tier group in that standard
+        for tiers in standards[standard]:
+            # The key of a tier group
+            for tier in tiers:
+                # For each tick in that tier group
+                for tick in tiers[tier]:
+                    # If tick hasn't been ticked
+                    if f'{standard}-{tick}' not in tickValues:
                         print(tick)
-                        grade_index = grades.index(tier[0])-1  # Student can't get that grade for standard
+                        # Student can't get that grade for standard
+                        grade_index = grades.index(tier[0]) - 1
                         if grade_index < listy[standard]:
-                            listy[standard] = grade_index  # Change grade if it changed
+                            # Change grade if it changed
+                            listy[standard] = grade_index
     print('faile:', listy)
     for standard in listy:  # Word name of each grade
         listy[standard] = grades[listy[standard]]
