@@ -285,7 +285,7 @@ def new_user(file, selected):
             if proj_exist:
                 print('already done')
                 continue
-            
+
             # Make new UserProject object
             new_project = UserProject(
                 user_id=id, project_id=project_id,
@@ -447,6 +447,15 @@ def search():  # On use of search bar
 @app.route('/project/<int:project_id>/<int:user_id>', methods=['POST', 'GET'])
 @login_required
 def project(project_id, user_id):
+    with Session(engine) as sql_session:
+        q = select(UserProject).where(
+            UserProject.user_id == user_id).where(
+                UserProject.project_id == project_id).where(
+                    UserProject.admin_id == current_user.id)
+        ue = sql_session.scalar(q)
+        if not ue:
+            return redirect(url_for('profile'))
+
     # If report submitted
     if request.method == 'POST':
         # Get all checked items
@@ -456,7 +465,7 @@ def project(project_id, user_id):
         textValues = {}
         for key, value in form_data.items():
             if key.startswith("texts["):  # If its a feedback item
-                text = key[6:-1]  # Remove the get the x from texts[x]
+                text = key[6:-1]  # Get the x from texts[x]
                 textValues[text] = value
 
         # Store data in session to be grabbed on other route
@@ -475,6 +484,14 @@ def project(project_id, user_id):
 @app.route('/clean/<int:project_id>/<int:user_id>')
 @login_required
 def clean(project_id, user_id):
+    with Session(engine) as sql_session:
+        q = select(UserProject).where(
+            UserProject.user_id == user_id).where(
+                UserProject.project_id == project_id).where(
+                    UserProject.admin_id == current_user.id)
+        ue = sql_session.scalar(q)
+        if not ue:
+            return redirect(url_for('profile'))
     grades = ['Not Achieved', 'Achieved', 'Merit', 'Excellence']
     # Get data back from session
     tickValues = session.get('ticks', [])
