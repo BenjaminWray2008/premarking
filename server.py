@@ -314,6 +314,11 @@ def load_user(user_id):
     return obj
 
 
+@app.errorhandler(405)
+def stoptryingtohack2(i):  # 405 page runner
+    return render_template('405.html')
+
+
 @app.errorhandler(404)
 def stoptryingtohack(i):  # 404 page runner
     return render_template('404.html')
