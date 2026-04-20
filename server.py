@@ -4,7 +4,8 @@ from flask import (Flask,
                    url_for,
                    request,
                    session,
-                   jsonify)
+                   jsonify,
+                   flash)
 from sqlalchemy.orm import (DeclarativeBase,
                             Mapped,
                             mapped_column,
@@ -350,7 +351,8 @@ def login():
             creds = session.scalar(q)
 
         if not creds:  # If invalid admin submitted
-            return render_template('login.html', form=form)
+            flash('Login Failed')
+            return redirect(url_for(('login')))
 
         id = creds.id
         hash = creds.hash
@@ -358,10 +360,12 @@ def login():
         h.update(UPass.encode())
         hashed = h.hexdigest()
         if hashed != hash:  # Compare against stored hash
-            return render_template('login.html', form=form)
+            flash('Login Failed')
+            return redirect(url_for(('login')))
 
         user = Admin(id=id, username=UEmail)
         login_user(user)  # Log in that admin object
+        flash('You were successfully logged in')
         return redirect(url_for('profile'))
     return render_template('login.html', form=form)
 

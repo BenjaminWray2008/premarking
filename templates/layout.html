@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
     <title>Document</title>
+
+
 </head>
 
 <body>
@@ -30,10 +32,36 @@
 
         </div>
     </div>
+    <div id="alert-box" class="alert hidden"></div>
+    {% with messages = get_flashed_messages(with_categories = true) %}
+    {% if messages %}
+    <script>
+
+
+        
+        function unhide(message) {
+            const box = getElementById('alert-box')
+            box.textContent = message;
+            box.style.position = 'fixed';
+            box.style.display = 'block';
+            setTimeout(() => {
+                box.style.display = none;
+            }, 3000);
+        };
+    </script>
+
+    {% for message in messages %}
+    <script>
+        unhide("{{ message }}");
+    </script>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
     {% block content %}
 
     {% endblock %}
     <script>
+
         const searchbar = document.getElementById('searchbar')
         console.log('hi')
         searchbar.addEventListener('input', async () => {

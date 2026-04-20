@@ -492,6 +492,9 @@ textarea {
 
 /* #region globals  */
 
+
+
+
 html {
     scroll-behavior: smooth;
 }
@@ -517,3 +520,22 @@ body {
 }
 
 /* #endregion */
+
+
+
+.alert{
+    position: fixed;
+    top: 100px;
+    left: 50%;
+
+    padding: 12px 20px;
+    border-radius: 8px;
+    z-index: 1000;
+    transition: opacity 0.3s ease;
+    width:50vw;
+    background-color: red;
+}
+
+.hidden{
+    display:none;
+}
