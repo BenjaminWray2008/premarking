@@ -395,10 +395,12 @@ def instructions():
         selected = form.dropdown.data
         print("VALID FILE:", file, selected)
         new_user(file, selected)
-
+        flash(f'Uploaded {form.dropdown.data} projects successfully from {form.file.data.filename}')
     else:
         if request.method == 'POST':
             print("ERRORS:", form.errors)
+            flash_message = f'Failed upload of {form.file.data.filename} for {form.dropdown.data} projects Error: Invalid file type, CSV only!'
+            flash(flash_message)
 
     return render_template('instructions.html', form=form, backto=True)
 

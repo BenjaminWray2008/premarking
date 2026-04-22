@@ -32,8 +32,9 @@
 
         </div>
     </div>
+    <div class="alert-center">
     <div id="alert-box" class="alert hidden"></div>
-    {% with messages = get_flashed_messages(with_categories = true) %}
+    {% with messages = get_flashed_messages() %}
     {% if messages %}
     <script>
 
@@ -42,11 +43,14 @@
         function unhide(message) {
             const box = document.getElementById('alert-box')
             box.textContent = message;
+            console.log(message);
             box.style.position = 'fixed';
             box.style.display = 'block';
+      
             setTimeout(() => {
                 box.style.display = 'none';
-            }, 3000);
+            
+            }, 5000);
         };
     </script>
 
@@ -57,6 +61,7 @@
     {% endfor %}
     {% endif %}
     {% endwith %}
+      </div>
     {% block content %}
 
     {% endblock %}
@@ -79,6 +84,7 @@
             })
         })
     </script>
+  
 </body>
 
 </html>

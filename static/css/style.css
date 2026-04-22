@@ -525,17 +525,29 @@ body {
 
 .alert{
     position: fixed;
-    top: 100px;
-    left: 50%;
-
-    padding: 12px 20px;
-    border-radius: 8px;
+    top: 5vw;
+    width:fit-content;
+    justify-content: center;
+    font-family: 'Inter';
+    font-size:1.2vw;
+    padding: 2vw 2vw;
+    border-radius: 1vw;
     z-index: 1000;
     transition: opacity 0.3s ease;
-    width:50vw;
-    background-color: red;
+    width:30vw;
+    background-color: rgb(244, 158, 29);
+    border:2px black solid;
 }
 
 .hidden{
     display:none;
 }
+
+.alert-center{
+    width:100%;
+    display:flex;
+    justify-content: center;
+}
+
+
+
