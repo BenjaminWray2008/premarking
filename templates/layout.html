@@ -40,12 +40,12 @@
 
         
         function unhide(message) {
-            const box = getElementById('alert-box')
+            const box = document.getElementById('alert-box')
             box.textContent = message;
             box.style.position = 'fixed';
             box.style.display = 'block';
             setTimeout(() => {
-                box.style.display = none;
+                box.style.display = 'none';
             }, 3000);
         };
     </script>

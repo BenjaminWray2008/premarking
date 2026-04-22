@@ -374,6 +374,7 @@ def login():
 @login_required
 def logout():
     logout_user()
+    flash('Logged Out!')
     return redirect(url_for('login'))
 
 
@@ -566,6 +567,7 @@ def clean(project_id, user_id):
         send_email(email, path, type, snu, UData.name)
         print('EMAIL SENT')
         sql_session.commit()
+        flash(f'Sent email to {email}')
     return redirect(url_for('profile'))
 
 
