@@ -537,6 +537,7 @@ body {
     width:30vw;
     background-color: rgb(244, 158, 29);
     border:2px black solid;
+    text-align: center;
 }
 
 .hidden{
