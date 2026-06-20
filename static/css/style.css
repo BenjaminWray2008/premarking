@@ -18,26 +18,26 @@
 }
 
 .sign-up-page {
-    padding: 5vw;
+    padding: 7vw;
     display: flex;
     justify-content: center;
 }
 
 .signup-labels {
     font-size: 1.4vw;
-    margin: 0.9vh 0 0.9vh 0;
+    margin: 1.2vh 0 1.2vh 0;
     font-family: 'Inter';
 }
 
 .signup-page-flex-line {
-    margin-bottom: 1.5vw;
+    margin-bottom: 1.2vw;
 }
 
 .submit-signup {
     background-color: #358b35;
     border: none;
     border-radius: 0.75vw;
-    padding: 0.5vw 1vw 0.5vw 1vw;
+    padding: 0.5vw 0.8vw 0.5vw 0.8vw;
     font-family: 'Poppins';
     font-size: 1.4vw;
     float: right;
@@ -128,7 +128,7 @@
 }
 
 .instruction {
-    margin-bottom: 1vw;
+    margin-bottom: 1.5vw;
 }
 
 .file {
@@ -435,7 +435,7 @@ textarea {
     bottom: 1vh;
     right: 0.8vw;
     z-index: 99;
-    background-color: rgb(242, 179, 253);
+    background-color: rgb(237, 159, 250);
     font-family: 'Inter';
     padding: 0.5vw;
     border-radius: 5px;

@@ -190,9 +190,11 @@ def send_email(email, path, proj_type, assess_num, user_name):
     msg['Subject'] = f'Feedback for {assess_num}'
     msg['From'] = 'premarkingsoftware@gmail.com'
     msg['To'] = email
-    msg.set_content(f"""Hi {user_name},
-                     here's some feedback for your {proj_type}
-                     project ({assess_num}) :)""")
+    msg.set_content(
+        f"Hi {user_name},\n"
+        f"here's some feedback for your {proj_type}\n"
+        f"project ({assess_num}) :)"
+        )
 
     with open(path, 'rb') as f:
         pdf = f.read()

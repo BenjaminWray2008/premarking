@@ -3,11 +3,11 @@
     <h1 class="instructions-header">Instructions to add new Student Projects:</h1>
     <form method="POST" enctype="multipart/form-data" class="file-inputs">
         <div>
-            <p class="instruction">"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                incididunt ut labore et
-                dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                ex
-                ea commodo consequat.</p>
+            <p class="instruction">Once logged into KAMAR, go to Reporting and click Student Lists. Open the Student
+                List – Custom Fields option, then use the search filter at the top left to find all attending students.
+                Next, click the Field List tab, click Select All to grab every available data column, and hit Apply.
+                Finally, click Actions at the top left, select Export, make sure the format is set to CSV, and hit OK to
+                save the complete file to your computer. Upload the file in the below selector.</p>
 
             {{ form.hidden_tag() }}
             <label for="file" class="file-label">Choose CSV:</label>
@@ -15,22 +15,16 @@
             <span id="file-name" class="file-name-text">No file selected</span>
         </div>
         <div>
-            <p class="instruction">"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                incididunt ut labore et
-                dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                ex
-                ea commodo consequat."</p>
+            <p class="instruction">From the dropdown below, select the project type you would like to generate each
+                students project under.</p>
             <!-- 
         <label for="dropdown" class="dropdown-instructions-label">Select Project Type:</label> -->
             {{ form.dropdown(id="dropdown", class="dropdown-instructions") }}
 
         </div>
         <div>
-            <p class="instruction">"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                incididunt ut labore et
-                dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                ex
-                ea commodo consequat."</p>
+            <p class="instruction">On upload, you will find a new student profile in your profile page which you can
+                click on to find more information!</p>
 
             {{ form.upload(class="file-label") }}
         </div>
